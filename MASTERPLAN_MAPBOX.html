@@ -8,7 +8,11 @@
 <style>
   body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#0e1418; color:#eee; }
   #map { position:absolute; inset:0; }
-  .hud { position:absolute; top:14px; left:14px; z-index:4; background:rgba(15,22,28,.92); padding:14px 16px; border-radius:8px; max-width:300px; font-size:12px; line-height:1.5; backdrop-filter:blur(6px); box-shadow:0 4px 14px rgba(0,0,0,.55);}
+  .topnav { position:absolute; top:14px; left:14px; z-index:5; background:rgba(15,22,28,.92); padding:6px 8px; border-radius:8px; backdrop-filter:blur(6px); display:flex; gap:6px; box-shadow:0 4px 14px rgba(0,0,0,.55);}
+  .topnav a { color:#9bb1c4; text-decoration:none; padding:6px 12px; border-radius:5px; font-size:12px; transition:all .15s;}
+  .topnav a:hover { background:#234; color:#cdf;}
+  .topnav a.active { background:#3060c0; color:#fff;}
+  .hud { position:absolute; top:60px; left:14px; z-index:4; background:rgba(15,22,28,.92); padding:14px 16px; border-radius:8px; max-width:300px; font-size:12px; line-height:1.5; backdrop-filter:blur(6px); box-shadow:0 4px 14px rgba(0,0,0,.55);}
   .hud h2 { margin:0 0 4px; font-size:15px; font-weight:600;}
   .hud .sub { color:#9bb1c4; font-size:11px; margin-bottom:8px;}
   .hud .stat { display:flex; justify-content:space-between; margin:2px 0;}
@@ -32,14 +36,23 @@
 <body>
 <div id="map"></div>
 
+<div class="topnav">
+  <a href="MASTERPLAN_MAPBOX.html" class="active">Мастер-план</a>
+  <a href="MASTERPLAN_EARTHWORKS.html">Землеустройство</a>
+  <a href="MASTERPLAN_INTERACTIVE.html">2D Leaflet</a>
+</div>
+
 <div class="hud">
-  <h2>Эмоция — Хелвачаури (v2)</h2>
-  <div class="sub">Аджара, Грузия · 41,5816° N, 41,6779° E</div>
+  <h2>Эмоция — мастер-план (v3)</h2>
+  <div class="sub">Состояние «после земляных работ» · Аджара, Грузия</div>
   <div class="stat"><span>Площадь:</span><span>3,98 га</span></div>
+  <div class="stat"><span>Террас (T225–T280):</span><span>5 шт</span></div>
   <div class="stat"><span>Лотов:</span><span>48 (avg 295 м²)</span></div>
-  <div class="stat"><span>Муниц. дорога:</span><span>2070 м · 3 м · 14 карманов</span></div>
-  <div class="stat"><span>Внутр. сеть:</span><span>V_N 348 м + 11 галерей</span></div>
-  <div class="stat"><span>AP1…AP6:</span><span>6 точек доступа</span></div>
+  <div class="stat"><span>Подпорные стены:</span><span>744 пог.м</span></div>
+  <div class="stat"><span>Дренаж (талвег + канавы):</span><span>2403 м</span></div>
+  <div class="stat"><span>Нетто на вывоз:</span><span>+41 458 м³</span></div>
+  <div class="stat"><span>V_N + 11 галерей:</span><span>348 м + 691 м</span></div>
+  <div class="stat"><span>Муниц. дорога:</span><span>2070 м · 14 карманов</span></div>
   <div class="actions">
     <button onclick="flyToBird()">Сверху</button>
     <button onclick="flyToOrbit()">Облёт 3D</button>
@@ -49,23 +62,25 @@
 </div>
 
 <div class="layers">
-  <h3>Слои v2</h3>
+  <h3>После земляных работ</h3>
+  <label><input type="checkbox" data-layer="terraces" checked>
+    <span class="swatch" style="background:#94b878"></span>Террасы T225…T280</label>
+  <label><input type="checkbox" data-layer="walls_gabion" checked>
+    <span class="swatch" style="background:#a05030;height:3px;border-radius:0"></span>Габион. стены</label>
+  <label><input type="checkbox" data-layer="walls_rc" checked>
+    <span class="swatch" style="background:#7a1818;height:3px;border-radius:0"></span>Ж/б стены</label>
+  <label><input type="checkbox" data-layer="drain_main" checked>
+    <span class="swatch" style="background:#1c5fa8;height:3px;border-radius:0"></span>Талвег (канал)</label>
+
+  <h3 style="margin-top:14px">Посёлок v3</h3>
   <label><input type="checkbox" data-layer="site" checked>
     <span class="swatch" style="background:transparent;border:2px solid #fff"></span>Контур участка</label>
-  <label><input type="checkbox" data-layer="cadastre">
-    <span class="swatch" style="background:transparent;border:1px dashed #888"></span>Кадастровые границы</label>
-  <label><input type="checkbox" data-layer="slope25">
-    <span class="swatch" style="background:#c33;opacity:.4"></span>Склон >25°</label>
-  <label><input type="checkbox" data-layer="nobuild" checked>
-    <span class="swatch" style="background:#3070b8;opacity:.5"></span>No-build (talweg)</label>
   <label><input type="checkbox" data-layer="lots" checked>
-    <span class="swatch" style="background:#fde6c7"></span>Лоты (48)</label>
-  <label><input type="checkbox" data-layer="lots-fill">
-    <span class="swatch" style="background:#e58a4a"></span>Лоты на насыпи</label>
+    <span class="swatch" style="background:#e8ce98"></span>Дома 48 шт (3 м)</label>
   <label><input type="checkbox" data-layer="lots-labels" checked>
     <span class="swatch" style="background:transparent;border:1px solid #fff;color:#fff;font-size:8px;line-height:11px;text-align:center">L</span>Номера лотов</label>
   <label><input type="checkbox" data-layer="public" checked>
-    <span class="swatch" style="background:#5a9a4a"></span>Общественные платформы</label>
+    <span class="swatch" style="background:#d77b40"></span>Общественные платформы</label>
   <label><input type="checkbox" data-layer="municipal" checked>
     <span class="swatch" style="background:#a87060"></span>Муниципальная (3 м)</label>
   <label><input type="checkbox" data-layer="passing_bays" checked>
@@ -78,10 +93,18 @@
     <span class="swatch" style="background:#5a8dd0"></span>Галереи L01…L11</label>
   <label><input type="checkbox" data-layer="turncirc" checked>
     <span class="swatch" style="background:#9ec1ff"></span>Разворотные круги</label>
-  <label><input type="checkbox" data-layer="protect">
-    <span class="swatch" style="background:#a02828;opacity:.3"></span>Охранные зоны (КТП/А1/А2/скваж)</label>
   <label><input type="checkbox" data-layer="objects" checked>
     <span class="swatch" style="background:#d77b40"></span>Объекты (КТП, A1/A2, скваж.)</label>
+
+  <h3 style="margin-top:14px">До работ (диагност.)</h3>
+  <label><input type="checkbox" data-layer="cadastre">
+    <span class="swatch" style="background:transparent;border:1px dashed #888"></span>Кадастровые границы</label>
+  <label><input type="checkbox" data-layer="slope25">
+    <span class="swatch" style="background:#c33;opacity:.4"></span>Склон >25° (исходный)</label>
+  <label><input type="checkbox" data-layer="nobuild">
+    <span class="swatch" style="background:#3070b8;opacity:.5"></span>No-build (talweg, исх.)</label>
+  <label><input type="checkbox" data-layer="protect">
+    <span class="swatch" style="background:#a02828;opacity:.3"></span>Охранные зоны</label>
 
   <div class="style-switch">
     <h3>Стиль карты</h3>
@@ -131,6 +154,9 @@ function setupLayers() {
   if (!map.getSource('cadastre')) {
     map.addSource('cadastre', {type:'geojson', data:'./parcels_khelvachauri.geojson'});
   }
+  if (!map.getSource('ew')) {
+    map.addSource('ew', {type:'geojson', data:'./earthworks_v3_4326.geojson'});
+  }
 
   const fc = v => ['==', ['get','feature_class'], v];
 
@@ -141,30 +167,47 @@ function setupLayers() {
     paint:{'line-color':'#888','line-width':1,'line-dasharray':[2,2],'line-opacity':0.65},
     layout:{visibility:'none'}});
 
-  // Slope >25
+  // ───── состояние "ПОСЛЕ землеустройства" ─────
+  // Террасные плато (фон под лотами и платформами)
+  const TC = ['match', ['get','terrace'],
+    'T225','#d8e6a0', 'T240','#b8d090', 'T255','#94b878',
+    'T270','#759c60', 'T280','#56804c', '#888'];
+  map.addLayer({id:'terrace-fill', type:'fill', source:'ew', filter:fc('terrace_polygon'),
+    paint:{'fill-color':TC, 'fill-opacity':0.55, 'fill-outline-color':'#3a4f2a'}});
+  map.addLayer({id:'terrace-labels', type:'symbol', source:'ew', filter:fc('terrace_polygon'),
+    layout:{'text-field':['concat', ['get','terrace'], ' · ', ['number-format',['get','z_target_m'],{}], ' м'],
+            'text-size':11, 'text-font':['Open Sans Semibold','Arial Unicode MS Bold']},
+    paint:{'text-color':'#234','text-halo-color':'#fff','text-halo-width':1.4}});
+  // Подпорные стены
+  map.addLayer({id:'wall-gabion', type:'line', source:'ew',
+    filter:['all', fc('retaining_wall'), ['==',['get','wall_type'],'gabion']],
+    paint:{'line-color':'#a05030','line-width':3.5,'line-opacity':0.9}});
+  map.addLayer({id:'wall-rc', type:'line', source:'ew',
+    filter:['all', fc('retaining_wall'), ['==',['get','wall_type'],'rc_cantilever']],
+    paint:{'line-color':'#7a1818','line-width':4.5,'line-opacity':0.95}});
+  // Узкий талвег (магистральный сток после устройства канала)
+  map.addLayer({id:'drain-main', type:'line', source:'ew', filter:fc('drainage_main'),
+    paint:{'line-color':'#1c5fa8','line-width':2.5,'line-dasharray':[2,1.5],'line-opacity':0.9}});
+
+  // ───── "ДО работ" слои — оставлены, но выключены по умолчанию ─────
   map.addLayer({id:'slope25-fill', type:'fill', source:'mp', filter:fc('raw_slope_gt25_dem'),
     paint:{'fill-color':'#c33','fill-opacity':0.35}, layout:{visibility:'none'}});
-
-  // No-build drainage
   map.addLayer({id:'nobuild-fill', type:'fill', source:'mp', filter:fc('drainage_no_build_corridor'),
-    paint:{'fill-color':'#3070b8','fill-opacity':0.4}});
-
-  // Зелёный buffer
+    paint:{'fill-color':'#3070b8','fill-opacity':0.4}, layout:{visibility:'none'}});
   map.addLayer({id:'green-fill', type:'fill', source:'mp', filter:fc('common_green_buffer'),
-    paint:{'fill-color':'#94c47d','fill-opacity':0.25}});
+    paint:{'fill-color':'#94c47d','fill-opacity':0.25}, layout:{visibility:'none'}});
   map.addLayer({id:'slope-buffer-fill', type:'fill', source:'mp', filter:fc('common_retaining_slope'),
-    paint:{'fill-color':'#c4936b','fill-opacity':0.4}});
+    paint:{'fill-color':'#c4936b','fill-opacity':0.4}, layout:{visibility:'none'}});
 
-  // Лоты
+  // Лоты — после земляных работ всё ровно, дома стоят на готовых платформах (3 м крыша)
   map.addLayer({id:'lots-fill', type:'fill-extrusion', source:'mp', filter:fc('residential_lot'),
     paint:{
-      'fill-extrusion-color':['case',
-         ['==',['get','build_status'],'fill_platform_+2.5m_armoground_required'], '#e58a4a',
-         ['==',['get','build_status'],'terracing_with_partial_walls'], '#f5c98f',
-         '#fde6c7'],
-      'fill-extrusion-height':['case',
-         ['==',['get','build_status'],'fill_platform_+2.5m_armoground_required'], 2.5, 0.4],
-      'fill-extrusion-opacity':0.85}});
+      'fill-extrusion-color':['match',['get','terrace'],
+         'T225','#f0deb8', 'T240','#ecd6a8', 'T255','#e8ce98',
+         'T270','#e4c688', 'T280','#e0be78', '#fde6c7'],
+      'fill-extrusion-height':3.0,
+      'fill-extrusion-base':0.0,
+      'fill-extrusion-opacity':0.92}});
   map.addLayer({id:'lots-line', type:'line', source:'mp', filter:fc('residential_lot'),
     paint:{'line-color':'#5a3a14','line-width':0.7,'line-opacity':0.7}});
   map.addLayer({id:'lots-labels', type:'symbol', source:'mp', filter:fc('residential_lot'),
@@ -238,7 +281,7 @@ function setupLayers() {
     layout:{visibility:'none'}});
 
   // Click popups
-  const popupLayers = ['lots-fill','public-fill','vn-line','galleries-line','municipal-line','ap-circle','passing-bays','turncirc-fill','objects-points'];
+  const popupLayers = ['lots-fill','public-fill','vn-line','galleries-line','municipal-line','ap-circle','passing-bays','turncirc-fill','objects-points','terrace-fill','wall-gabion','wall-rc','drain-main'];
   popupLayers.forEach(id => {
     map.on('click', id, e => {
       const p = e.features[0].properties;
@@ -253,11 +296,12 @@ function setupLayers() {
     inp.addEventListener('change', e => toggleGroup(e.target.dataset.layer, e.target.checked));
   });
 
-  // Defaults
+  // Defaults: показываем "ПОСЛЕ работ" — террасы, стены, талвег ON;
+  // "ДО работ" слои выключены
   toggleGroup('cadastre', false);
   toggleGroup('slope25', false);
+  toggleGroup('nobuild', false);
   toggleGroup('protect', false);
-  toggleGroup('lots-fill', false);
 
   setTimeout(()=>map.flyTo({center:SITE_CENTER, zoom:17.0, pitch:55, bearing:25, duration:3500, essential:true}), 800);
 }
@@ -275,13 +319,19 @@ function renderPopup(p) {
   if (fc==='borehole') return `<b>Скважина ${p.function_id}</b><br>${p.note || ''}`;
   if (fc==='water_tank') return `<b>${p.function_id}</b> · ${p.volume_m3} м³<br>Z = ${p.elev_m} м БС`;
   if (fc==='transformer') return `<b>${p.function_id}</b><br>${p.power_kva} кВА · Z = ${p.elev_m} м БС`;
+  if (fc==='terrace_polygon') return `<b>Терраса ${p.terrace}</b><br>z = <b>${p.z_target_m} м БС</b><br>Площадь: ${p.area_m2} м²<br>Лотов: ${p.lot_count}<br>Выемка: ${p.cut_m3} м³ · Насыпь: ${p.fill_m3} м³<br>Нетто: ${p.net_m3 > 0 ? '+' : ''}${p.net_m3} м³`;
+  if (fc==='retaining_wall') return `<b>Подпорная стена</b><br>${p.wall_type === 'gabion' ? 'габион' : 'ж/б консольная'}<br>Между: ${p.between} (Δz = ${p.dz_m} м)<br>H_расч: ${p.h_design_m} м · Длина: ${p.length_m} м`;
+  if (fc==='drainage_main') return `<b>Талвег (магистр. сток)</b><br>${p.length_m} м<br>${p.pipe_type}<br><i>${p.role}</i>`;
   return '<pre style="font-size:10px">'+JSON.stringify(p,null,2)+'</pre>';
 }
 
 function toggleGroup(g, vis) {
   const map_ = {
+    'terraces':['terrace-fill','terrace-labels'],
+    'walls_gabion':['wall-gabion'], 'walls_rc':['wall-rc'],
+    'drain_main':['drain-main'],
     'site':['site-line'], 'cadastre':['cadastre-line'], 'slope25':['slope25-fill'],
-    'nobuild':['nobuild-fill'], 'lots':['lots-fill','lots-line'], 'lots-fill':[],
+    'nobuild':['nobuild-fill'], 'lots':['lots-fill','lots-line'],
     'lots-labels':['lots-labels'], 'public':['public-fill','public-labels'],
     'municipal':['municipal-corr','municipal-line'], 'passing_bays':['passing-bays','passing-labels'],
     'ap':['ap-circle','ap-labels'], 'vn':['vn-corr','vn-line'],
