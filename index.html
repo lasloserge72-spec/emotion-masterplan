@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Эмоция — мастер-план посёлка | Хелвачаури, Аджара</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Концепт-проект посёлка 50 домов в Хелвачаури / Шарабидзееби. Аджара, Грузия. Мастер-план с привязкой к местности.">
+<style>
+  :root { --bg:#0e1418; --fg:#eee; --muted:#9bb1c4; --accent:#7fc1e5; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+         background:var(--bg); color:var(--fg); line-height:1.55; }
+  .hero {
+    min-height:60vh; padding:60px 24px 40px;
+    background:
+      linear-gradient(135deg, rgba(14,20,24,.85), rgba(14,20,24,.7)),
+      url('PLAN_SATELLITE.png');
+    background-size:cover; background-position:center;
+    display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .hero h1 { font-size:clamp(28px, 5vw, 48px); margin:0 0 8px;
+              max-width:900px; }
+  .hero .lead { color:var(--muted); font-size:clamp(14px, 2vw, 18px);
+                 max-width:700px; }
+  .container { max-width:1100px; margin:0 auto; padding:30px 24px 60px; }
+  .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
+  .btn {
+    padding:11px 18px; background:#1c5fa8; color:#fff; border-radius:6px;
+    text-decoration:none; font-weight:500; transition:.15s;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn:hover { background:#2a7ad8; }
+  .btn.alt { background:#234; }
+  .btn.alt:hover { background:#345; }
+  .grid {
+    display:grid; gap:18px; margin-top:30px;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  }
+  .card {
+    background:#1a2530; border:1px solid #2a3540; border-radius:8px;
+    padding:20px; transition:.2s;
+  }
+  .card:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .card h3 { margin:0 0 6px; color:var(--accent); }
+  .card p { color:var(--muted); margin:0 0 12px; font-size:13px; }
+  .card a { color:#fff; font-size:14px; text-decoration:none;
+             border-bottom:1px solid #345; }
+  .card a:hover { border-color:var(--accent); }
+  table.stats { width:100%; border-collapse:collapse; margin:20px 0; font-size:13px; }
+  table.stats td { padding:6px 8px; border-bottom:1px solid #2a3540; }
+  table.stats td:first-child { color:var(--muted); }
+  table.stats td:last-child { color:#fff; text-align:right; font-weight:500; }
+  h2 { margin-top:36px; padding-bottom:8px; border-bottom:1px solid #2a3540; }
+  .gallery { display:grid; gap:14px;
+             grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); }
+  .gallery img { width:100%; border-radius:6px; border:1px solid #2a3540;
+                  background:#fff; }
+  .gallery figcaption { color:var(--muted); font-size:12px; margin-top:4px; }
+  footer { color:var(--muted); padding:30px 24px; font-size:12px;
+            text-align:center; border-top:1px solid #2a3540; }
+  code { background:#1a2530; padding:1px 6px; border-radius:3px;
+          font-size:12px; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="container" style="padding:0">
+    <h1>Эмоция — концепт посёлка 50 домов</h1>
+    <p class="lead">
+      Хелвачаури / Шарабидзееби, Аджара, Грузия · 41,58° N, 41,68° E ·
+      3,98 га · перепад 104 м · средний уклон 21°.
+    </p>
+    <div class="actions">
+      <a class="btn" href="MASTERPLAN_MAPBOX.html">3D-карта Mapbox</a>
+      <a class="btn alt" href="MASTERPLAN_INTERACTIVE.html">2D-карта (OSM)</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+<h2>Сводные показатели проекта</h2>
+<table class="stats">
+  <tr><td>Жилых участков</td><td>50 × 335 м²</td></tr>
+  <tr><td>Σ чистая площадь участков</td><td>16 750 м²</td></tr>
+  <tr><td>Из них на насыпных платформах +2,5 м (raw &gt; 25°)</td><td>19</td></tr>
+  <tr><td>Общественных платформ</td><td>5 (рестор. 990, common 750, fit 225, kids 300, entry 630 м²)</td></tr>
+  <tr><td>Велнес-павильон + купальни</td><td>200 м² + 5 шт</td></tr>
+  <tr><td>Пруды для рыбалки (для членов посёлка)</td><td>2 (20×14 + 16×12 м)</td></tr>
+  <tr><td>Дорог осей · длина</td><td>9 · 928,5 м</td></tr>
+  <tr><td>Уклон C2 / C3 (макс.)</td><td>≤ 10 %</td></tr>
+  <tr><td>Развороты R = 9 м</td><td>4 (TRN_WEST резервный пожарный)</td></tr>
+  <tr><td>Подпорные стены</td><td>~370 пог. м (преим. армогрунт)</td></tr>
+  <tr><td>Σ выемка / насыпь</td><td>44 500 / 44 300 м³</td></tr>
+  <tr><td>Дисбаланс (вывоз грунта)</td><td><b style="color:#7fc1e5">+173 м³ ≈ 0 (no-export)</b></td></tr>
+  <tr><td>Источники воды (этап 1)</td><td>восточный ручей + скважина 80–120 м</td></tr>
+  <tr><td>Накопители</td><td>A1 = 50 м³, A2 = 30 м³</td></tr>
+  <tr><td>Эксплуатируемые крыши</td><td>да, для всех 50 домов</td></tr>
+  <tr><td>Расчётная электр. нагрузка</td><td>481 кВт расч., 337 кВт пик</td></tr>
+  <tr><td>КТП 10/0,4 кВ</td><td>2 × 400 кВА (загрузка 47 %)</td></tr>
+  <tr><td>Опоры освещения LED 60 Вт</td><td>34 (шаг 35 м)</td></tr>
+</table>
+
+<h2>Карты с привязкой к местности</h2>
+<div class="grid">
+  <div class="card">
+    <h3>3D-карта Mapbox</h3>
+    <p>Премиум-карта со спутником, рельефом DEM, 3D-extrusions участков и платформ. Камера-облёт, переключение стилей.</p>
+    <a href="MASTERPLAN_MAPBOX.html">Открыть →</a>
+  </div>
+  <div class="card">
+    <h3>2D-карта Leaflet</h3>
+    <p>Лёгкая интерактивная карта с подложками OSM / Esri WorldImagery / OpenTopoMap. 14 переключаемых слоёв.</p>
+    <a href="MASTERPLAN_INTERACTIVE.html">Открыть →</a>
+  </div>
+  <div class="card">
+    <h3>GeoJSON в WGS84</h3>
+    <p>Сводный слой 140 объектов для подключения к Mapbox Studio, QGIS, ArcGIS, любому веб-клиенту.</p>
+    <a href="masterplan_4326.geojson">Скачать →</a>
+  </div>
+  <div class="card">
+    <h3>Кадастровые границы</h3>
+    <p>4 надела: 22.26.08.014 / .075 / .076 / .077. Базовая геометрия из Public Registry of Georgia.</p>
+    <a href="parcels_khelvachauri.geojson">Скачать →</a>
+  </div>
+</div>
+
+<h2>Подсистемные планы</h2>
+<div class="gallery">
+  <figure>
+    <a href="PLAN_07_FINAL.png"><img src="PLAN_07_FINAL.png" alt="Финальная схема"></a>
+    <figcaption>Финальная сводная схема (no-export, 9 осей, велнес в центре)</figcaption>
+  </figure>
+  <figure>
+    <a href="PLAN_01_ROADS.png"><img src="PLAN_01_ROADS.png" alt="Дороги"></a>
+    <figcaption>План 01 — дорожная сеть</figcaption>
+  </figure>
+  <figure>
+    <a href="PLAN_02_WATER.png"><img src="PLAN_02_WATER.png" alt="Вода"></a>
+    <figcaption>План 02 — вода: интейк, накопители, дренаж, аквакультура</figcaption>
+  </figure>
+  <figure>
+    <a href="PLAN_03_ELECTRO.png"><img src="PLAN_03_ELECTRO.png" alt="Электро"></a>
+    <figcaption>План 03 — электроснабжение и освещение</figcaption>
+  </figure>
+  <figure>
+    <a href="PLAN_04_EARTHWORKS.png"><img src="PLAN_04_EARTHWORKS.png" alt="Земляные работы"></a>
+    <figcaption>План 04 — земляные работы и стены</figcaption>
+  </figure>
+  <figure>
+    <a href="PLAN_SATELLITE.png"><img src="PLAN_SATELLITE.png" alt="Спутник"></a>
+    <figcaption>Спутниковый рендер (Esri WorldImagery)</figcaption>
+  </figure>
+</div>
+
+<h2>Технологии</h2>
+<p style="color:var(--muted)">
+  Mapbox GL JS v3 · Leaflet · Esri WorldImagery · OpenStreetMap · OpenTopoMap ·
+  GeoJSON в EPSG:4326 (исходник в EPSG:32638 UTM 38N) · DEM 8 м (Mapbox/SRTM,
+  ±1,5–3 м по высоте) · обработка через shapely + pyproj + matplotlib +
+  contextily.
+</p>
+
+</div>
+
+<footer>
+  Концепт-стадия. Финальный проект — после топосъёмки 1:500, геологии,
+  гидрологии и стадии «П».<br>
+  Координаты центра: 41,581612° N, 41,677857° E.
+</footer>
+
+</body>
+</html>

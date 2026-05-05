@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Эмоция — мастер-план | Mapbox 3D</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css">
+<style>
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#0e1418; color:#eee; }
+  #map { position: absolute; inset: 0; }
+
+  .hud {
+    position: absolute; top: 14px; left: 14px; z-index: 4;
+    background: rgba(15,22,28,.92); padding: 14px 16px;
+    border-radius: 8px; max-width: 290px; font-size: 12px;
+    line-height: 1.5; color:#eee; box-shadow: 0 4px 14px rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+  }
+  .hud h2 { margin:0 0 4px; font-size: 15px; color:#fff; font-weight:600; }
+  .hud .sub { color:#9bb1c4; font-size: 11px; margin-bottom:8px; }
+  .hud .stat { display:flex; justify-content:space-between; margin: 2px 0; }
+  .hud .stat span:last-child { color:#7fc1e5; font-weight:600; }
+  .hud .actions { margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; }
+  .hud button {
+    background:#234; border:1px solid #456; color:#cdf;
+    padding:6px 10px; border-radius:5px; cursor:pointer; font-size:11px;
+  }
+  .hud button:hover { background:#345; }
+
+  .layers {
+    position: absolute; top: 14px; right: 14px; z-index: 4;
+    background: rgba(15,22,28,.92); padding: 12px 14px;
+    border-radius: 8px; font-size: 12px; color:#eee;
+    box-shadow: 0 4px 14px rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+    max-height: calc(100vh - 28px); overflow:auto;
+    min-width: 240px;
+  }
+  .layers h3 { margin: 0 0 6px; font-size:12px; color:#9bb1c4;
+               text-transform:uppercase; letter-spacing:0.6px; }
+  .layers label { display:flex; align-items:center; gap:8px;
+                  padding:3px 0; cursor:pointer; }
+  .layers label:hover { color:#7fc1e5; }
+  .layers input[type=checkbox] { accent-color:#7fc1e5; }
+  .swatch { display:inline-block; width:14px; height:14px;
+            border-radius:3px; border:1px solid rgba(0,0,0,.3); }
+  .style-switch {
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px solid rgba(155,177,196,.25);
+  }
+  .style-switch select {
+    width: 100%; padding: 5px;
+    background:#1a2530; border:1px solid #345; color:#eee;
+    border-radius:4px; font-size:11px;
+  }
+
+  .mapboxgl-popup-content { background: #1a2530; color:#eee;
+                             border:1px solid #345; font-size:12px; }
+  .mapboxgl-popup-tip { border-top-color:#1a2530 !important;
+                          border-bottom-color:#1a2530 !important; }
+  .mapboxgl-popup-close-button { color:#9bb1c4; font-size:16px; }
+
+  .scale-attrib {
+    position:absolute; bottom:0; left:0; right:0; z-index:3;
+    color: #ccc; font-size: 10px; padding: 4px 10px;
+    background: linear-gradient(180deg, rgba(15,22,28,0) 0%, rgba(15,22,28,.7) 100%);
+  }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<div class="hud">
+  <h2>Эмоция — Хелвачаури</h2>
+  <div class="sub">Аджара, Грузия · 41,5816° N, 41,6779° E</div>
+  <div class="stat"><span>Площадь:</span><span>3,98 га</span></div>
+  <div class="stat"><span>Лотов:</span><span>50 × 335 м²</span></div>
+  <div class="stat"><span>Перепад:</span><span>104 м (205→309)</span></div>
+  <div class="stat"><span>Средний уклон:</span><span>21° (39 %)</span></div>
+  <div class="stat"><span>Выемка / насыпь:</span><span>44,5 / 44,3 тыс м³</span></div>
+  <div class="stat"><span>Вывоз грунта:</span><span style="color:#6ee">0 м³</span></div>
+  <div class="actions">
+    <button onclick="flyToBird()">Сверху</button>
+    <button onclick="flyToOrbit()">Облёт 3D</button>
+    <button onclick="flyToEntrance()">Въезд</button>
+    <button onclick="flyToCreek()">Ручей</button>
+    <button onclick="resetView()">Сброс</button>
+  </div>
+</div>
+
+<div class="layers">
+  <h3>Слои</h3>
+  <label><input type="checkbox" data-layer="site" checked>
+    <span class="swatch" style="background:transparent;border:2px solid #fff"></span>
+    Контур участка</label>
+  <label><input type="checkbox" data-layer="cadastre">
+    <span class="swatch" style="background:transparent;border:1px dashed #888"></span>
+    Кадастровые границы</label>
+  <label><input type="checkbox" data-layer="slope25">
+    <span class="swatch" style="background:#c33;opacity:.4"></span>
+    Склон >25° (естеств.)</label>
+  <label><input type="checkbox" data-layer="lots-normal" checked>
+    <span class="swatch" style="background:#fff7c2"></span>
+    Лоты на естеств. грунте (31)</label>
+  <label><input type="checkbox" data-layer="lots-fill" checked>
+    <span class="swatch" style="background:#f5a86c"></span>
+    Лоты на насыпи +2,5 м (19)</label>
+  <label><input type="checkbox" data-layer="lots-labels" checked>
+    <span class="swatch" style="background:transparent;border:1px solid #fff;color:#fff;font-size:8px;line-height:11px;text-align:center">P</span>
+    Номера лотов</label>
+  <label><input type="checkbox" data-layer="public" checked>
+    <span class="swatch" style="background:linear-gradient(135deg,#d77b40 0%,#5a9a4a 50%,#7a5fb5 100%)"></span>
+    Общественные платформы</label>
+  <label><input type="checkbox" data-layer="wellness" checked>
+    <span class="swatch" style="background:#5b8a9a"></span>
+    Велнес + 5 купален</label>
+  <label><input type="checkbox" data-layer="roads" checked>
+    <span class="swatch" style="background:#2a7a2a"></span>
+    Дороги (9 осей)</label>
+  <label><input type="checkbox" data-layer="corridors">
+    <span class="swatch" style="background:#a07050;opacity:.45"></span>
+    Дорожные коридоры 6 м</label>
+  <label><input type="checkbox" data-layer="turnarounds" checked>
+    <span class="swatch" style="background:#f8e0a0;border:1.5px dashed #c43"></span>
+    Развороты R = 9 м</label>
+  <label><input type="checkbox" data-layer="water" checked>
+    <span class="swatch" style="background:#1c5fa8"></span>
+    Вода (источники, A1, A2)</label>
+  <label><input type="checkbox" data-layer="drainage" checked>
+    <span class="swatch" style="background:#3070b8"></span>
+    Дренаж H–H'</label>
+  <label><input type="checkbox" data-layer="fishing" checked>
+    <span class="swatch" style="background:#7fb3d5"></span>
+    Рыболовные пруды</label>
+  <label><input type="checkbox" data-layer="electrical" checked>
+    <span class="swatch" style="background:#a02828"></span>
+    Электро (HV + 2 КТП)</label>
+  <label><input type="checkbox" data-layer="lighting">
+    <span class="swatch" style="background:#f0c020"></span>
+    Освещение (34 опоры)</label>
+
+  <div class="style-switch">
+    <h3>Стиль карты</h3>
+    <select id="style-picker">
+      <option value="mapbox://styles/mapbox/satellite-streets-v12">Спутник + улицы</option>
+      <option value="mapbox://styles/mapbox/satellite-v9">Чистый спутник</option>
+      <option value="mapbox://styles/mapbox/outdoors-v12">Outdoors (рельеф)</option>
+      <option value="mapbox://styles/mapbox/standard">Standard 3D</option>
+      <option value="mapbox://styles/mapbox/dark-v11">Тёмная</option>
+    </select>
+  </div>
+</div>
+
+<div class="scale-attrib" id="scale-attrib"></div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoicmFrYW15IiwiYSI6ImNtb3NldWpqbDJhd3MydHNhaHQwMDlpZ2UifQ.Bt3CXPsubYvQnH22yYkqBQ';
+
+const SITE_CENTER = [41.677857, 41.581612];   // [lon, lat]
+const SITE_BBOX = [[41.6764, 41.5798], [41.6796, 41.5837]];
+
+let map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
+  center: SITE_CENTER,
+  zoom: 16.0,
+  pitch: 65,
+  bearing: 25,
+  antialias: true,
+  attributionControl: false,
+});
+
+map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'bottom-right');
+map.addControl(new mapboxgl.FullscreenControl(), 'bottom-right');
+map.addControl(new mapboxgl.ScaleControl({ unit: 'metric' }), 'bottom-left');
+map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
+
+function setupLayers() {
+  // 3D terrain via Mapbox DEM
+  if (!map.getSource('mapbox-dem')) {
+    map.addSource('mapbox-dem', {
+      type: 'raster-dem',
+      url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+      tileSize: 512,
+      maxzoom: 14,
+    });
+  }
+  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.4 });
+
+  // Sky for atmospheric depth
+  if (!map.getLayer('sky')) {
+    map.addLayer({
+      id: 'sky',
+      type: 'sky',
+      paint: {
+        'sky-type': 'atmosphere',
+        'sky-atmosphere-sun': [0, 90],
+        'sky-atmosphere-sun-intensity': 12,
+      },
+    });
+  }
+
+  // Hill shading for added relief
+  if (!map.getLayer('hillshade')) {
+    map.addLayer({
+      id: 'hillshade',
+      type: 'hillshade',
+      source: 'mapbox-dem',
+      paint: { 'hillshade-exaggeration': 0.4 },
+    }, 'water');
+  }
+
+  // Load combined GeoJSON
+  fetch('./masterplan_4326.geojson').then(r => r.json()).then(gj => {
+    if (map.getSource('mp')) return;
+    map.addSource('mp', { type: 'geojson', data: gj });
+    map.addSource('cadastre', {
+      type: 'geojson',
+      data: './parcels_khelvachauri.geojson',
+    });
+
+    // Helper to filter by layer property
+    const f = v => ['==', ['get', 'layer'], v];
+    const fc = v => ['==', ['get', 'feature_class'], v];
+
+    // Site boundary
+    map.addLayer({
+      id: 'site-line',
+      type: 'line',
+      source: 'mp',
+      filter: fc('site_boundary'),
+      paint: {
+        'line-color': '#ffffff', 'line-width': 3,
+        'line-opacity': 0.95, 'line-blur': 0.5,
+      },
+    });
+
+    // Cadastre (off by default)
+    map.addLayer({
+      id: 'cadastre-line',
+      type: 'line',
+      source: 'cadastre',
+      paint: {
+        'line-color': '#888', 'line-width': 1,
+        'line-dasharray': [2, 2], 'line-opacity': 0.65,
+      },
+      layout: { visibility: 'none' },
+    });
+
+    // Slope >25 (off by default)
+    map.addLayer({
+      id: 'slope25-fill',
+      type: 'fill',
+      source: 'mp',
+      filter: fc('raw_slope_gt25_dem'),
+      paint: {
+        'fill-color': '#c33', 'fill-opacity': 0.35,
+        'fill-outline-color': '#c33',
+      },
+      layout: { visibility: 'none' },
+    });
+
+    // Lots — split into normal vs fill
+    map.addLayer({
+      id: 'lots-normal-fill',
+      type: 'fill-extrusion',
+      source: 'mp',
+      filter: ['all', f('lot'),
+               ['<=', ['to-number', ['get', 'raw_slope_deg']], 25]],
+      paint: {
+        'fill-extrusion-color': '#fff7c2',
+        'fill-extrusion-height': 0.4,
+        'fill-extrusion-base': 0,
+        'fill-extrusion-opacity': 0.85,
+      },
+    });
+    map.addLayer({
+      id: 'lots-fill-fill',
+      type: 'fill-extrusion',
+      source: 'mp',
+      filter: ['all', f('lot'),
+               ['>', ['to-number', ['get', 'raw_slope_deg']], 25]],
+      paint: {
+        'fill-extrusion-color': '#f5a86c',
+        'fill-extrusion-height': 2.5,  // visualize 2.5 m fill platform
+        'fill-extrusion-base': 0,
+        'fill-extrusion-opacity': 0.88,
+      },
+    });
+    map.addLayer({
+      id: 'lots-line',
+      type: 'line',
+      source: 'mp',
+      filter: f('lot'),
+      paint: {
+        'line-color': '#5a3a14', 'line-width': 0.8, 'line-opacity': 0.7,
+      },
+    });
+    map.addLayer({
+      id: 'lots-labels',
+      type: 'symbol',
+      source: 'mp',
+      filter: f('lot'),
+      layout: {
+        'text-field': ['get', 'id'],
+        'text-size': 10,
+        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+      },
+      paint: {
+        'text-color': '#222',
+        'text-halo-color': '#fff', 'text-halo-width': 1.2,
+      },
+    });
+
+    // Public platforms — 3D extrusion
+    map.addLayer({
+      id: 'public-fill',
+      type: 'fill-extrusion',
+      source: 'mp',
+      filter: fc('public_platform'),
+      paint: {
+        'fill-extrusion-color': [
+          'match', ['get', 'function_id'],
+          'RESTAURANT', '#d77b40',
+          'COMMON',     '#5a9a4a',
+          'KIDS',       '#e6a040',
+          'FIT',        '#3a8a93',
+          'ENTRY',      '#7a5fb5',
+          '#888'
+        ],
+        'fill-extrusion-height': 3.0,
+        'fill-extrusion-opacity': 0.9,
+      },
+    });
+    map.addLayer({
+      id: 'public-labels',
+      type: 'symbol',
+      source: 'mp',
+      filter: fc('public_platform'),
+      layout: {
+        'text-field': ['get', 'function_id'],
+        'text-size': 13,
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      },
+      paint: {
+        'text-color': '#fff',
+        'text-halo-color': '#000', 'text-halo-width': 1.5,
+      },
+    });
+
+    // Wellness pavilion (200 m², different color)
+    map.addLayer({
+      id: 'wellness-fill',
+      type: 'fill-extrusion',
+      source: 'mp',
+      filter: f('wellness_pavilion'),
+      paint: {
+        'fill-extrusion-color': '#5b8a9a',
+        'fill-extrusion-height': 4.0,
+        'fill-extrusion-opacity': 0.92,
+      },
+    });
+    map.addLayer({
+      id: 'bathing-tubs',
+      type: 'circle',
+      source: 'mp',
+      filter: f('bathing_tub'),
+      paint: {
+        'circle-radius': 5,
+        'circle-color': '#4bb1c4',
+        'circle-stroke-color': '#1c5fa8',
+        'circle-stroke-width': 1.5,
+      },
+    });
+
+    // Road corridors (off by default)
+    map.addLayer({
+      id: 'corridors-fill',
+      type: 'fill',
+      source: 'mp',
+      filter: fc('road_corridor_6m_concept'),
+      paint: { 'fill-color': '#a07050', 'fill-opacity': 0.55 },
+      layout: { visibility: 'none' },
+    });
+
+    // Roads centerlines
+    map.addLayer({
+      id: 'roads-line',
+      type: 'line',
+      source: 'mp',
+      filter: fc('road_centerline'),
+      paint: {
+        'line-color': '#5fff5f', 'line-width': 3, 'line-opacity': 0.92,
+        'line-blur': 0.4,
+      },
+    });
+
+    // Turnarounds — generate buffer rings via existing point + radius
+    map.addLayer({
+      id: 'turnarounds',
+      type: 'circle',
+      source: 'mp',
+      filter: fc('turnaround_point'),
+      paint: {
+        'circle-radius': {
+          stops: [[16, 7], [18, 18], [20, 36]],
+        },
+        'circle-color': [
+          'case',
+          ['==', ['get', 'road_id'], 'TRN_WEST'], '#f8c0bc',
+          '#f8e0a0'
+        ],
+        'circle-stroke-color': [
+          'case',
+          ['==', ['get', 'road_id'], 'TRN_WEST'], '#a02828',
+          '#c43'
+        ],
+        'circle-stroke-width': 2,
+        'circle-opacity': 0.7,
+      },
+    });
+
+    // Water sources & accumulators
+    map.addLayer({
+      id: 'water-points',
+      type: 'circle',
+      source: 'mp',
+      filter: ['any',
+               f('water_intake'), f('borehole'), f('water_accumulator')],
+      paint: {
+        'circle-radius': 7,
+        'circle-color': [
+          'match', ['get', 'layer'],
+          'water_intake', '#1c5fa8',
+          'borehole', '#082c52',
+          'water_accumulator', '#3070b8',
+          '#888'
+        ],
+        'circle-stroke-color': '#fff',
+        'circle-stroke-width': 2,
+      },
+    });
+    map.addLayer({
+      id: 'water-labels',
+      type: 'symbol',
+      source: 'mp',
+      filter: ['any',
+               f('water_intake'), f('borehole'), f('water_accumulator')],
+      layout: {
+        'text-field': [
+          'match', ['get', 'layer'],
+          'water_intake', 'Интейк',
+          'borehole', 'Скважина',
+          'water_accumulator', ['get', 'name'],
+          ''
+        ],
+        'text-size': 11, 'text-offset': [0, 1.4],
+        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+      },
+      paint: {
+        'text-color': '#cdf', 'text-halo-color': '#000',
+        'text-halo-width': 1.5,
+      },
+    });
+
+    // Drainage line + outfall
+    map.addLayer({
+      id: 'drainage-line',
+      type: 'line',
+      source: 'mp',
+      filter: ['any', fc('drainage_line'), fc('creek_receiver_concept')],
+      paint: {
+        'line-color': [
+          'match', ['get', 'feature_class'],
+          'drainage_line', '#3070b8',
+          'creek_receiver_concept', '#7fb3d5',
+          '#888'
+        ],
+        'line-width': [
+          'match', ['get', 'feature_class'],
+          'drainage_line', 3,
+          2
+        ],
+        'line-dasharray': [
+          'match', ['get', 'feature_class'],
+          'creek_receiver_concept', ['literal', [3, 2]],
+          ['literal', [1]]
+        ],
+      },
+    });
+    map.addLayer({
+      id: 'outfall',
+      type: 'circle',
+      source: 'mp',
+      filter: fc('outfall_point'),
+      paint: {
+        'circle-radius': 8,
+        'circle-color': '#cc4040',
+        'circle-stroke-color': '#fff',
+        'circle-stroke-width': 2,
+      },
+    });
+
+    // Fishing ponds
+    map.addLayer({
+      id: 'fishing-ponds',
+      type: 'circle',
+      source: 'mp',
+      filter: f('fishing_pond'),
+      paint: {
+        'circle-radius': 12,
+        'circle-color': '#7fb3d5',
+        'circle-stroke-color': '#1c5fa8',
+        'circle-stroke-width': 2.5,
+        'circle-opacity': 0.88,
+      },
+    });
+    map.addLayer({
+      id: 'fishing-labels',
+      type: 'symbol',
+      source: 'mp',
+      filter: f('fishing_pond'),
+      layout: {
+        'text-field': ['concat', 'Рыбалка ', ['get', 'size_m'], ' м'],
+        'text-size': 11, 'text-offset': [0, 1.6],
+        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+      },
+      paint: {
+        'text-color': '#cdf', 'text-halo-color': '#000',
+        'text-halo-width': 1.5,
+      },
+    });
+
+    // Electrical
+    map.addLayer({
+      id: 'electrical-points',
+      type: 'circle',
+      source: 'mp',
+      filter: ['any', f('hv_input'), f('ktp')],
+      paint: {
+        'circle-radius': 7,
+        'circle-color': '#a02828',
+        'circle-stroke-color': '#fff',
+        'circle-stroke-width': 2,
+      },
+    });
+    map.addLayer({
+      id: 'electrical-labels',
+      type: 'symbol',
+      source: 'mp',
+      filter: ['any', f('hv_input'), f('ktp')],
+      layout: {
+        'text-field': ['get', 'name'],
+        'text-size': 10, 'text-offset': [0, 1.4],
+        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+      },
+      paint: {
+        'text-color': '#fbb',
+        'text-halo-color': '#000', 'text-halo-width': 1.5,
+      },
+    });
+
+    // Lighting (off by default)
+    map.addLayer({
+      id: 'lighting-points',
+      type: 'circle',
+      source: 'mp',
+      filter: f('lighting_column'),
+      paint: {
+        'circle-radius': 3,
+        'circle-color': '#f0c020',
+        'circle-stroke-color': '#a87010',
+        'circle-stroke-width': 0.8,
+      },
+      layout: { visibility: 'none' },
+    });
+
+    // Popup helpers
+    const popupLayers = [
+      'lots-normal-fill', 'lots-fill-fill', 'public-fill',
+      'wellness-fill', 'bathing-tubs', 'turnarounds',
+      'water-points', 'fishing-ponds', 'electrical-points',
+      'roads-line', 'drainage-line', 'outfall',
+    ];
+    popupLayers.forEach(layerId => {
+      map.on('click', layerId, e => {
+        const f = e.features[0];
+        const p = f.properties;
+        const html = renderPopup(p);
+        new mapboxgl.Popup({ closeButton: true, maxWidth: '280px' })
+          .setLngLat(e.lngLat).setHTML(html).addTo(map);
+      });
+      map.on('mouseenter', layerId, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', layerId, () => {
+        map.getCanvas().style.cursor = '';
+      });
+    });
+
+    // Layer toggles wired
+    document.querySelectorAll('input[data-layer]').forEach(input => {
+      input.addEventListener('change', e => {
+        toggleGroup(e.target.dataset.layer, e.target.checked);
+      });
+    });
+
+    // Apply default visibility
+    toggleGroup('cadastre', false);
+    toggleGroup('slope25', false);
+    toggleGroup('corridors', false);
+    toggleGroup('lighting', false);
+
+    // Soft fly-in once loaded
+    setTimeout(() => map.flyTo({
+      center: SITE_CENTER, zoom: 17.2, pitch: 60, bearing: 35,
+      duration: 4500, essential: true,
+    }), 800);
+  });
+}
+
+function renderPopup(p) {
+  const layer = p.layer || p.feature_class || '';
+  if (layer === 'lot') {
+    const slope = parseFloat(p.raw_slope_deg || 0);
+    const isFill = slope > 25;
+    return `<b>${p.id}</b> · 335 м²<br>
+            Терраса: ${p.terrace_id}<br>
+            Уклон естеств.: ${slope.toFixed(1)}°<br>
+            Z: ${p.z_m} м БС<br>
+            ${isFill ? '<i style="color:#fa8">Насыпная платформа +2,5 м</i>' :
+                       '<i>На естественном грунте</i>'}`;
+  }
+  if (layer === 'public_platform') {
+    return `<b>${p.function_id}</b> · ${p.platform_area_m2} м²<br>
+            <span style="color:#9bb1c4">${p.engineering_interpretation || ''}</span>`;
+  }
+  if (layer === 'wellness_pavilion') {
+    return `<b>Велнес-павильон</b> · ${p.area_m2} м²<br>
+            Сауна + хаммам + раздевалки`;
+  }
+  if (layer === 'bathing_tub') return `<b>Купальня</b><br>3 × 2 м · от A2 + UV + хлор 0,3 мг/л`;
+  if (layer === 'water_intake') return `<b>Водозабор</b><br>Восточный ручей · 1,5–2,5 л/с (расч.)`;
+  if (layer === 'borehole') return `<b>Скважина</b><br>80–120 м · 1–2 л/с · этап 1`;
+  if (layer === 'water_accumulator') return `<b>${p.name}</b><br>${p.vol_m3} м³ · ~${p.elev_m_aprx} м БС`;
+  if (layer === 'fishing_pond') return `<b>${p.name}</b> · ${p.size_m} м · ${p.area_m2} м²<br>Для рыбалки членами посёлка`;
+  if (layer === 'hv_input') return `<b>HV ввод 10 кВ</b><br>от Энергопро Аджара`;
+  if (layer === 'ktp') return `<b>${p.name}</b><br>10/0,4 кВ`;
+  if (p.feature_class === 'road_centerline') return `<b>Дорога ${p.road_id || ''}</b><br>Целевой уклон ≤ 10 %`;
+  if (p.feature_class === 'turnaround_point') {
+    return p.road_id === 'TRN_WEST'
+      ? `<b>Резервный пожарный въезд</b><br>R = 9 м (обяз. по нормам Грузии)`
+      : `<b>Разворот ${p.road_id}</b><br>R = 9 м`;
+  }
+  if (p.feature_class === 'drainage_line') return `<b>Талвег H–H'</b><br>379 м · до 0,95 м³/с`;
+  if (p.feature_class === 'outfall_point') return `<b>Выпуск H'</b><br>z ≈ 205 м БС · контролируемый`;
+  if (p.feature_class === 'creek_receiver_concept') return `<b>Ручей-приёмник</b>`;
+  return JSON.stringify(p, null, 2);
+}
+
+function toggleGroup(group, visible) {
+  const groups = {
+    'site': ['site-line'],
+    'cadastre': ['cadastre-line'],
+    'slope25': ['slope25-fill'],
+    'lots-normal': ['lots-normal-fill'],
+    'lots-fill': ['lots-fill-fill'],
+    'lots-labels': ['lots-labels'],
+    'public': ['public-fill', 'public-labels'],
+    'wellness': ['wellness-fill', 'bathing-tubs'],
+    'roads': ['roads-line'],
+    'corridors': ['corridors-fill'],
+    'turnarounds': ['turnarounds'],
+    'water': ['water-points', 'water-labels'],
+    'drainage': ['drainage-line', 'outfall'],
+    'fishing': ['fishing-ponds', 'fishing-labels'],
+    'electrical': ['electrical-points', 'electrical-labels'],
+    'lighting': ['lighting-points'],
+  };
+  const ids = groups[group] || [];
+  ids.forEach(id => {
+    if (map.getLayer(id)) {
+      map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
+    }
+  });
+}
+
+// Camera presets
+function flyToBird() {
+  map.flyTo({ center: SITE_CENTER, zoom: 17.0, pitch: 0, bearing: 0,
+              duration: 2000 });
+}
+function flyToOrbit() {
+  let bearing = 0;
+  map.flyTo({ center: SITE_CENTER, zoom: 17.5, pitch: 70, bearing: 0,
+              duration: 1500 });
+  setTimeout(() => {
+    const start = performance.now();
+    function rotate() {
+      const t = (performance.now() - start) / 1000;
+      bearing = (t * 8) % 360;
+      map.setBearing(bearing);
+      if (t < 45) requestAnimationFrame(rotate);
+    }
+    rotate();
+  }, 1600);
+}
+function flyToEntrance() {
+  map.flyTo({ center: [41.6783, 41.5836], zoom: 18.5, pitch: 75,
+              bearing: 200, duration: 2500 });
+}
+function flyToCreek() {
+  map.flyTo({ center: [41.6795, 41.5810], zoom: 18.5, pitch: 75,
+              bearing: 270, duration: 2500 });
+}
+function resetView() {
+  map.flyTo({ center: SITE_CENTER, zoom: 17.2, pitch: 60, bearing: 35,
+              duration: 2000 });
+}
+
+// Style picker (preserves layers)
+document.getElementById('style-picker').addEventListener('change', e => {
+  const visibility = {};
+  document.querySelectorAll('input[data-layer]').forEach(input => {
+    visibility[input.dataset.layer] = input.checked;
+  });
+  map.setStyle(e.target.value);
+  map.once('style.load', () => {
+    setupLayers();
+    setTimeout(() => {
+      Object.entries(visibility).forEach(([g, v]) => toggleGroup(g, v));
+    }, 600);
+  });
+});
+
+map.on('style.load', setupLayers);
+</script>
+</body>
+</html>
