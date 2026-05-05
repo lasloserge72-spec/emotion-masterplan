@@ -2,30 +2,33 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<title>Эмоция — землеустройство (v3) | Mapbox 3D</title>
+<title>Эмоция — землеустройство 3D | v3 Чистая</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css">
 <style>
   body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#0e1418; color:#eee; }
-  #map { position:absolute; inset:0; }
-  .topnav { position:absolute; top:14px; left:14px; z-index:5; background:rgba(15,22,28,.92); padding:6px 8px; border-radius:8px; backdrop-filter:blur(6px); display:flex; gap:6px; box-shadow:0 4px 14px rgba(0,0,0,.55);}
-  .topnav a { color:#9bb1c4; text-decoration:none; padding:6px 12px; border-radius:5px; font-size:12px; transition:all .15s;}
-  .topnav a:hover { background:#234; color:#cdf;}
-  .topnav a.active { background:#3060c0; color:#fff;}
-  .stage-toggle { display:flex; gap:0; margin-bottom:10px; border-radius:6px; overflow:hidden; border:1px solid #345;}
-  .stage-toggle button { flex:1; background:#1a2530; border:0; color:#9bb1c4; padding:8px 10px; cursor:pointer; font-size:12px; font-weight:500; transition:all .15s;}
-  .stage-toggle button.active { background:#3060c0; color:#fff;}
-  .stage-toggle button:hover:not(.active) { background:#234; color:#cdf;}
-  .hud { position:absolute; top:60px; left:14px; z-index:4; background:rgba(15,22,28,.92); padding:14px 16px; border-radius:8px; max-width:340px; font-size:12px; line-height:1.5; backdrop-filter:blur(6px); box-shadow:0 4px 14px rgba(0,0,0,.55);}
+  #map { position:absolute; inset:54px 0 0 0; }
+  .topbar { display:flex; justify-content:space-between; align-items:center;
+    padding:6px 14px; background:#0a1014; border-bottom:1px solid #1a2530; gap:10px; flex-wrap:wrap;
+    height:54px; box-sizing:border-box; }
+  .topbar .badge { background:#7a1d1d; color:#fde8e8; padding:4px 10px; border-radius:4px;
+    font-size:10px; font-weight:600; letter-spacing:.4px; text-transform:uppercase; white-space:nowrap; }
+  .topbar .nav { display:flex; gap:2px; flex-wrap:wrap; }
+  .topbar .nav a { color:#9bb1c4; padding:6px 10px; border-radius:5px; text-decoration:none; font-size:12px; }
+  .topbar .nav a:hover { background:#1a2530; color:#cdf; }
+  .topbar .nav a.active { background:#1c5fa8; color:#fff; }
+  .langs { display:flex; gap:2px; }
+  .langs button { background:#1a2530; color:#9bb1c4; border:1px solid #2a3540;
+    padding:5px 9px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:600; }
+  .langs button:hover { background:#234; color:#cdf; }
+  .langs button.active { background:#1c5fa8; color:#fff; border-color:#1c5fa8; }
+  .hud { position:absolute; top:68px; left:14px; z-index:4; background:rgba(15,22,28,.92); padding:14px 16px; border-radius:8px; max-width:340px; font-size:12px; line-height:1.5; backdrop-filter:blur(6px); box-shadow:0 4px 14px rgba(0,0,0,.55); max-height:calc(100vh - 80px); overflow:auto;}
   .hud h2 { margin:0 0 4px; font-size:15px; font-weight:600;}
   .hud .sub { color:#9bb1c4; font-size:11px; margin-bottom:8px;}
-  .hud .stat { display:flex; justify-content:space-between; margin:2px 0;}
-  .hud .stat span:last-child { color:#7fc1e5; font-weight:600;}
+  .hud .stat { display:flex; justify-content:space-between; margin:2px 0; gap:6px;}
+  .hud .stat span:last-child { color:#7fc1e5; font-weight:600; text-align:right;}
   .hud .group-title { color:#9bb1c4; font-size:11px; text-transform:uppercase; letter-spacing:0.6px; margin:8px 0 4px; border-top:1px solid rgba(155,177,196,.2); padding-top:6px;}
-  .hud .actions { margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;}
-  .hud button { background:#234; border:1px solid #456; color:#cdf; padding:6px 10px; border-radius:5px; cursor:pointer; font-size:11px;}
-  .hud button:hover { background:#345;}
-  .layers { position:absolute; top:14px; right:14px; z-index:4; background:rgba(15,22,28,.92); padding:12px 14px; border-radius:8px; font-size:12px; backdrop-filter:blur(6px); box-shadow:0 4px 14px rgba(0,0,0,.55); max-height:calc(100vh - 28px); overflow:auto; min-width:240px;}
+  .layers { position:absolute; top:68px; right:14px; z-index:4; background:rgba(15,22,28,.92); padding:12px 14px; border-radius:8px; font-size:12px; backdrop-filter:blur(6px); box-shadow:0 4px 14px rgba(0,0,0,.55); max-height:calc(100vh - 80px); overflow:auto; min-width:240px;}
   .layers h3 { margin:0 0 6px; font-size:12px; color:#9bb1c4; text-transform:uppercase; letter-spacing:0.6px;}
   .layers label { display:flex; align-items:center; gap:8px; padding:3px 0; cursor:pointer;}
   .layers label:hover { color:#7fc1e5;}
@@ -37,110 +40,108 @@
   .mapboxgl-popup-content { background:#1a2530; color:#eee; border:1px solid #345; font-size:12px;}
   .mapboxgl-popup-tip { border-top-color:#1a2530 !important; border-bottom-color:#1a2530 !important;}
   .mapboxgl-popup-close-button { color:#9bb1c4; font-size:16px;}
+  .orbit-ctl { position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+    z-index:5; background:rgba(15,22,28,.92); padding:6px; border-radius:8px;
+    backdrop-filter:blur(6px); box-shadow:0 4px 14px rgba(0,0,0,.55); display:flex; gap:4px;}
+  .orbit-ctl button { background:#1a2530; color:#cdf; border:1px solid #2a3540;
+    padding:8px 14px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:600;
+    min-width:42px; transition:all .15s;}
+  .orbit-ctl button:hover { background:#234; color:#7fc1e5; border-color:#7fc1e5;}
+  .orbit-ctl button.active { background:#1c5fa8; color:#fff; border-color:#1c5fa8;}
+  .orbit-ctl .lbl { padding:8px 6px; color:#9bb1c4; font-size:11px; align-self:center;}
 </style>
 </head>
 <body>
+
+<div class="topbar">
+  <div class="badge" data-i18n="badge.internal">ВНУТРЕННЕЕ ПРОСТРАНСТВО · ОТЧЁТНОСТЬ КОМАНДЫ ПРОЕКТА</div>
+  <div class="nav">
+    <a href="index.html" data-i18n="nav.home">Главная</a>
+    <a href="MASTERPLAN_MAPBOX.html" data-i18n="nav.mp3d">3D Мастер-план</a>
+    <a class="active" href="MASTERPLAN_EARTHWORKS.html" data-i18n="nav.earth3d">Землеустройство</a>
+    <a href="MASTERPLAN_INTERACTIVE.html" data-i18n="nav.leaflet">2D Leaflet</a>
+    <a href="villa.html" data-i18n="nav.villa">Вилла</a>
+  </div>
+  <div class="langs">
+    <button data-lang-btn="ru" data-i18n="lang.ru">РУС</button>
+    <button data-lang-btn="en" data-i18n="lang.en">ENG</button>
+    <button data-lang-btn="ka" data-i18n="lang.ka">ქარ</button>
+  </div>
+</div>
+
 <div id="map"></div>
 
-<div class="topnav">
-  <a href="MASTERPLAN_MAPBOX.html">Мастер-план</a>
-  <a href="MASTERPLAN_EARTHWORKS.html" class="active">Землеустройство</a>
-  <a href="MASTERPLAN_INTERACTIVE.html">2D Leaflet</a>
+<div class="orbit-ctl">
+  <span class="lbl" data-i18n="orbit.rot">Вращать:</span>
+  <button id="rot-l" data-i18n-title="orbit.left" title="Влево">◀</button>
+  <button id="rot-r" data-i18n-title="orbit.right" title="Вправо">▶</button>
+  <button id="orbit-toggle" data-i18n-title="orbit.auto" title="Авто-облёт">⟳</button>
+  <button id="rot-reset" data-i18n-title="orbit.reset" title="Сброс">↺</button>
+  <button id="pitch-up" data-i18n-title="orbit.pitch.up" title="Наклон +">▲</button>
+  <button id="pitch-dn" data-i18n-title="orbit.pitch.dn" title="Наклон −">▼</button>
 </div>
 
 <div class="hud">
-  <h2>Землеустройство</h2>
-  <div class="sub">Сравнение «до» и «после» земляных работ</div>
-
-  <div class="stage-toggle">
-    <button id="stage-before" onclick="setStage('before')">До работ</button>
-    <button id="stage-after" class="active" onclick="setStage('after')">После работ</button>
-  </div>
-
-  <div class="group-title">Террасы (5 шт, после)</div>
-  <div class="stat"><span>T225 / 227 м БС:</span><span>15 лотов · 8490 м²</span></div>
-  <div class="stat"><span>T240 / 243 м БС:</span><span>3 лота · 1984 м²</span></div>
-  <div class="stat"><span>T255 / 258 м БС:</span><span>19 лотов · 7756 м²</span></div>
-  <div class="stat"><span>T270 / 269 м БС:</span><span>11 лотов · 7014 м²</span></div>
-  <div class="stat"><span>T280 / 280 м БС:</span><span>0 лотов · 4100 м² (publ.)</span></div>
-
-  <div class="group-title">Баланс масс</div>
-  <div class="stat"><span>Выемка лоты+дороги:</span><span>66 331 м³</span></div>
-  <div class="stat"><span>Насыпь лоты+дороги:</span><span>24 872 м³</span></div>
-  <div class="stat"><span>Нетто (на вывоз):</span><span>+41 458 м³</span></div>
-  <div class="stat"><span>С бухтованием ×1.25:</span><span>~53 600 м³ вывоз</span></div>
-
-  <div class="group-title">Подпорные стены</div>
-  <div class="stat"><span>Габионные H≤2.5 м:</span><span>650 пог.м</span></div>
-  <div class="stat"><span>Ж/б консольные H≤4 м:</span><span>94 пог.м</span></div>
-  <div class="stat"><span>Всего:</span><span>744 пог.м</span></div>
-
-  <div class="group-title">Дренаж</div>
-  <div class="stat"><span>Талвег (открытый канал):</span><span>379 м</span></div>
-  <div class="stat"><span>Перехватные канавы D200:</span><span>2024 м</span></div>
-
-  <div class="actions">
-    <button onclick="flyToBird()">Сверху</button>
-    <button onclick="flyToOrbit()">Облёт 3D</button>
-    <button onclick="flyToT225()">T225 (низ)</button>
-    <button onclick="resetView()">К посёлку</button>
+  <h2 data-i18n="earth.title">Землеустройство (v3)</h2>
+  <div class="sub" data-i18n="earth.sub">5 террас, 3 стены, талвег, 4 AP, изолинии</div>
+  <div class="group-title" data-i18n="earth.terr.h">Террасы (z после работ)</div>
+  <div class="stat"><span data-i18n="earth.t240">T240:</span><span>11 207 m² · 243 m</span></div>
+  <div class="stat"><span data-i18n="earth.t255">T255:</span><span>12 489 m² · 258 m</span></div>
+  <div class="stat"><span data-i18n="earth.t270">T270:</span><span>9 095 m² · 269 m</span></div>
+  <div class="stat"><span data-i18n="earth.t280">T280:</span><span>4 364 m² · 280 m</span></div>
+  <div class="stat"><span data-i18n="earth.t225">T225:</span><span>758 m² · 227 m</span></div>
+  <div class="group-title" data-i18n="earth.walls.h">Подпорные стены</div>
+  <div class="stat"><span data-i18n="earth.rw1">RW T240↔T255:</span><span data-i18n="earth.rw1.v">189 m · h=15 m · ЖБ</span></div>
+  <div class="stat"><span data-i18n="earth.rw2">RW T255↔T270:</span><span data-i18n="earth.rw2.v">69 m · h=11 m · gabion</span></div>
+  <div class="stat"><span data-i18n="earth.rw3">RW T270↔T280:</span><span data-i18n="earth.rw3.v">105 m · h=11 m · gabion</span></div>
+  <div class="group-title" data-i18n="earth.drain.h">Дренаж</div>
+  <div class="stat"><span data-i18n="earth.tw">Талвег:</span><span data-i18n="earth.tw.v">379 m · 1 m buf</span></div>
+  <div class="stat"><span data-i18n="earth.contours.lab">Изолинии:</span><span data-i18n="earth.contours.v">54 levels</span></div>
+  <div class="group-title" data-i18n="earth.profile.h">Профили DEM</div>
+  <div style="font-size:11px;color:#9bb1c4">
+    <div data-i18n="earth.profile.aa">AA (N–S): 406 m · 104 m drop</div>
+    <div data-i18n="earth.profile.diag">HH (diag): 470 m</div>
+    <div style="margin-top:6px">
+      <a href="topo/04a_profile_long_AA_NS.png" target="_blank" style="color:#7fc1e5;font-size:11px">profile_AA.png ↗</a> ·
+      <a href="topo/01_dem_overview.png" target="_blank" style="color:#7fc1e5;font-size:11px">dem.png ↗</a> ·
+      <a href="topo/02_slope_map.png" target="_blank" style="color:#7fc1e5;font-size:11px">slope.png ↗</a> ·
+      <a href="topo/06_3d_view.png" target="_blank" style="color:#7fc1e5;font-size:11px">3d.png ↗</a>
+    </div>
   </div>
 </div>
 
 <div class="layers">
-  <h3>До работ (исходный рельеф)</h3>
-  <label><input type="checkbox" data-layer="before_slope25">
-    <span class="swatch" style="background:#c33;opacity:.55"></span>Склон >25° (нельзя)</label>
-  <label><input type="checkbox" data-layer="before_nobuild">
-    <span class="swatch" style="background:#3070b8;opacity:.55"></span>No-build (talweg)</label>
-  <label><input type="checkbox" data-layer="before_retslope">
-    <span class="swatch" style="background:#c4936b;opacity:.55"></span>Откосы под подпор</label>
-  <label><input type="checkbox" data-layer="before_greenbuf">
-    <span class="swatch" style="background:#94c47d;opacity:.4"></span>Зелёный буфер</label>
-
-  <h3 style="margin-top:14px">Слои земляных работ</h3>
-  <label><input type="checkbox" data-layer="terrace_T225" checked>
-    <span class="swatch" style="background:#d8e6a0"></span>T225 (z=227.1)</label>
-  <label><input type="checkbox" data-layer="terrace_T240" checked>
-    <span class="swatch" style="background:#b8d090"></span>T240 (z=242.7)</label>
-  <label><input type="checkbox" data-layer="terrace_T255" checked>
-    <span class="swatch" style="background:#94b878"></span>T255 (z=257.7)</label>
-  <label><input type="checkbox" data-layer="terrace_T270" checked>
-    <span class="swatch" style="background:#759c60"></span>T270 (z=268.6)</label>
-  <label><input type="checkbox" data-layer="terrace_T280" checked>
-    <span class="swatch" style="background:#56804c"></span>T280 (z=280)</label>
-  <label><input type="checkbox" data-layer="walls_gabion" checked>
-    <span class="swatch line" style="background:#a05030"></span>Габионная стена H≤2.5</label>
-  <label><input type="checkbox" data-layer="walls_rc" checked>
-    <span class="swatch line" style="background:#7a1818"></span>Ж/б консольная H≤4</label>
-  <label><input type="checkbox" data-layer="drain_main" checked>
-    <span class="swatch line" style="background:#1c5fa8"></span>Талвег (открытый)</label>
-  <label><input type="checkbox" data-layer="drain_terrace" checked>
-    <span class="swatch line" style="background:#5a9ad0"></span>Канавы D200</label>
-
-  <h3 style="margin-top:14px">Контекст v3</h3>
-  <label><input type="checkbox" data-layer="lots" checked>
-    <span class="swatch" style="background:transparent;border:1px solid #fde6c7"></span>Лоты v3 (контур)</label>
-  <label><input type="checkbox" data-layer="public" checked>
-    <span class="swatch" style="background:#d77b40"></span>Общественные</label>
-  <label><input type="checkbox" data-layer="roads" checked>
-    <span class="swatch line" style="background:#3060c0"></span>V_N + галереи</label>
-  <label><input type="checkbox" data-layer="municipal">
-    <span class="swatch line" style="background:#5a1d12"></span>Муниципальная</label>
-  <label><input type="checkbox" data-layer="site" checked>
-    <span class="swatch" style="background:transparent;border:2px solid #fff"></span>Контур участка</label>
-
+  <h3 data-i18n="layers.h">Слои</h3>
+  <label><input type="checkbox" data-layer="terraces" checked>
+    <span class="swatch" style="background:#bbf7d0"></span><span data-i18n="layers.terr.ext">Террасы (3D)</span></label>
+  <label><input type="checkbox" data-layer="walls" checked>
+    <span class="swatch line" style="background:#dc2626"></span><span data-i18n="layers.walls">Стены</span></label>
+  <label><input type="checkbox" data-layer="corridors" checked>
+    <span class="swatch" style="background:#fde68a;border-color:#a16207"></span><span data-i18n="layers.corridors">Коридоры стен</span></label>
+  <label><input type="checkbox" data-layer="talweg" checked>
+    <span class="swatch line" style="background:#1d4ed8"></span><span data-i18n="layers.talweg">Талвег</span></label>
+  <label><input type="checkbox" data-layer="contours" checked>
+    <span class="swatch line" style="background:#7e6240"></span><span data-i18n="layers.contours">Изолинии 1 м</span></label>
+  <label><input type="checkbox" data-layer="ap" checked>
+    <span class="swatch" style="background:#facc15"></span><span data-i18n="layers.ap">AP</span></label>
+  <label><input type="checkbox" data-layer="muni" checked>
+    <span class="swatch" style="background:#9ca3af"></span><span data-i18n="layers.muni">Муниципальная</span></label>
+  <label><input type="checkbox" data-layer="lots">
+    <span class="swatch" style="background:#dbeafe;border-color:#1e3a8a"></span><span data-i18n="layers.lots.line">Лоты (контур)</span></label>
+  <label><input type="checkbox" data-layer="cadastre">
+    <span class="swatch" style="background:transparent;border:1px dashed #9333ea"></span><span data-i18n="layers.cadastre">Кадастр</span></label>
   <div class="style-switch">
-    <h3>Стиль карты</h3>
+    <h3 data-i18n="layers.style">Стиль карты</h3>
     <select id="style-picker">
-      <option value="mapbox://styles/mapbox/satellite-streets-v12">Спутник + улицы</option>
-      <option value="mapbox://styles/mapbox/satellite-v9">Чистый спутник</option>
-      <option value="mapbox://styles/mapbox/outdoors-v12">Outdoors (рельеф)</option>
-      <option value="mapbox://styles/mapbox/dark-v11">Тёмная</option>
+      <option value="mapbox://styles/mapbox/satellite-v9" data-i18n="style.sat">Спутник</option>
+      <option value="mapbox://styles/mapbox/satellite-streets-v12" data-i18n="style.satstreets">Спутник + улицы</option>
+      <option value="mapbox://styles/mapbox/outdoors-v12" data-i18n="style.outdoors">Outdoors</option>
+      <option value="mapbox://styles/mapbox/dark-v11" data-i18n="style.dark">Тёмная</option>
     </select>
   </div>
 </div>
 
+<script src="i18n.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoicmFrYW15IiwiYSI6ImNtb3NtczlybzAxMGUycHIzbjBqczdzeWwifQ.NQGFy-GknuzWBo-R35Cuxg';
@@ -148,8 +149,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoicmFrYW15IiwiYSI6ImNtb3NtczlybzAxMGUycHIzbjBqc
 const SITE_CENTER = [41.677857, 41.581612];
 
 let map = new mapboxgl.Map({
-  container: 'map', style: 'mapbox://styles/mapbox/satellite-streets-v12',
-  center: SITE_CENTER, zoom: 16.8, pitch: 50, bearing: 15,
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-v9',
+  center: SITE_CENTER, zoom: 17, pitch: 65, bearing: 35,
   antialias: true, attributionControl: false,
 });
 map.addControl(new mapboxgl.NavigationControl({visualizePitch:true, showCompass:true}), 'bottom-left');
@@ -157,93 +159,103 @@ map.addControl(new mapboxgl.FullscreenControl(), 'bottom-left');
 map.addControl(new mapboxgl.ScaleControl({unit:'metric'}), 'bottom-right');
 map.addControl(new mapboxgl.AttributionControl({compact:true}), 'bottom-right');
 
-const TERRACE_COLOR = {
-  'T225':'#d8e6a0', 'T240':'#b8d090', 'T255':'#94b878', 'T270':'#759c60', 'T280':'#56804c'
-};
-const TERRACE_HEIGHT = {  // визуальная разница для 3D-extrusion
-  'T225': 0, 'T240': 15.6, 'T255': 30.6, 'T270': 41.5, 'T280': 52.9
-};
+const fc = v => ['==', ['get','feature_class'], v];
 
 function setupLayers() {
   if (!map.getSource('mapbox-dem')) {
     map.addSource('mapbox-dem', {type:'raster-dem', url:'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize:512, maxzoom:14});
   }
-  map.setTerrain({source:'mapbox-dem', exaggeration:1.3});
+  map.setTerrain({source:'mapbox-dem', exaggeration:1.5});
   if (!map.getLayer('sky')) {
     map.addLayer({id:'sky', type:'sky', paint:{'sky-type':'atmosphere','sky-atmosphere-sun':[0,90],'sky-atmosphere-sun-intensity':12}});
   }
-  if (!map.getLayer('hillshade')) {
-    map.addLayer({id:'hillshade', type:'hillshade', source:'mapbox-dem', paint:{'hillshade-exaggeration':0.35}}, 'water');
+
+  const sources = [
+    ['site','./site_4326.geojson'],
+    ['eng','./engineering_4326.geojson'],
+    ['muni','./municipal_road_4326.geojson'],
+    ['lots','./lots_4326.geojson'],
+    ['cadastre','./parcels_khelvachauri.geojson'],
+    ['contours','./topo/dem_contours_4326.geojson'],
+  ];
+  for (const [k,u] of sources) {
+    if (!map.getSource(k)) map.addSource(k, {type:'geojson', data:u});
   }
 
-  if (!map.getSource('ew')) map.addSource('ew', {type:'geojson', data:'./earthworks_v3_4326.geojson'});
-  if (!map.getSource('mp')) map.addSource('mp', {type:'geojson', data:'./masterplan_4326.geojson'});
+  map.addLayer({id:'site-line', type:'line', source:'site',
+    paint:{'line-color':'#ffffff','line-width':3,'line-opacity':0.95,'line-blur':0.5}});
 
-  const fc = v => ['==', ['get','feature_class'], v];
-  const tt = t => ['all', fc('terrace_polygon'), ['==', ['get','terrace'], t]];
+  // Contours
+  map.addLayer({id:'contours-minor', type:'line', source:'contours',
+    filter:['!=',['get','is_major'],true],
+    paint:{'line-color':'#a07840','line-width':0.7,'line-opacity':0.55}});
+  map.addLayer({id:'contours-major', type:'line', source:'contours',
+    filter:['==',['get','is_major'],true],
+    paint:{'line-color':'#6a4818','line-width':1.4,'line-opacity':0.85}});
+  map.addLayer({id:'contours-major-labels', type:'symbol', source:'contours',
+    filter:['==',['get','is_major'],true],
+    layout:{'text-field':['concat', ['number-format',['get','z_m'],{}], ' m'],
+            'symbol-placement':'line', 'text-size':10, 'text-font':['Open Sans Semibold','Arial Unicode MS Bold']},
+    paint:{'text-color':'#3a2a14','text-halo-color':'#fff','text-halo-width':1.4}});
 
-  // 1. Site boundary (база)
-  map.addLayer({id:'site-line', type:'line', source:'mp', filter:fc('site_boundary'),
-    paint:{'line-color':'#ffffff','line-width':3,'line-opacity':0.95}});
-
-  // 2. Террасы — заливка с относительной высотой
-  ['T225','T240','T255','T270','T280'].forEach(t => {
-    map.addLayer({id:`terr-${t}`, type:'fill', source:'ew', filter:tt(t),
-      paint:{'fill-color':TERRACE_COLOR[t], 'fill-opacity':0.55, 'fill-outline-color':'#3a4f2a'}});
-    map.addLayer({id:`terr-${t}-label`, type:'symbol', source:'ew', filter:tt(t),
-      layout:{'text-field':['concat',['get','terrace'],' · z=',['number-format',['get','z_target_m'],{}],' м'],
-              'text-size':13, 'text-font':['Open Sans Bold','Arial Unicode MS Bold']},
-      paint:{'text-color':'#234','text-halo-color':'#fff','text-halo-width':1.5}});
-  });
-
-  // 3. Подпорные стены (две группы)
-  map.addLayer({id:'wall-gabion', type:'line', source:'ew',
-    filter:['all', fc('retaining_wall'), ['==',['get','wall_type'],'gabion']],
-    paint:{'line-color':'#a05030','line-width':4,'line-opacity':0.9}});
-  map.addLayer({id:'wall-rc', type:'line', source:'ew',
-    filter:['all', fc('retaining_wall'), ['==',['get','wall_type'],'rc_cantilever']],
-    paint:{'line-color':'#7a1818','line-width':5,'line-opacity':0.95}});
-
-  // 4. Дренаж
-  map.addLayer({id:'drain-main', type:'line', source:'ew', filter:fc('drainage_main'),
-    paint:{'line-color':'#1c5fa8','line-width':3,'line-dasharray':[2,1.5],'line-opacity':0.95}});
-  map.addLayer({id:'drain-terrace', type:'line', source:'ew', filter:fc('drainage_terrace'),
-    paint:{'line-color':'#5a9ad0','line-width':1.4,'line-dasharray':[3,2],'line-opacity':0.7}});
-
-  // 4b. "ДО РАБОТ" слои — исходный рельеф, видны только в режиме "before"
-  map.addLayer({id:'before-slope25', type:'fill', source:'mp', filter:fc('raw_slope_gt25_dem'),
-    paint:{'fill-color':'#c33','fill-opacity':0.55,'fill-outline-color':'#7a0000'},
-    layout:{visibility:'none'}});
-  map.addLayer({id:'before-slope25-pattern', type:'line', source:'mp', filter:fc('raw_slope_gt25_dem'),
-    paint:{'line-color':'#7a0000','line-width':1.2,'line-dasharray':[2,3]},
-    layout:{visibility:'none'}});
-  map.addLayer({id:'before-nobuild', type:'fill', source:'mp', filter:fc('drainage_no_build_corridor'),
-    paint:{'fill-color':'#3070b8','fill-opacity':0.55,'fill-outline-color':'#0a3060'},
-    layout:{visibility:'none'}});
-  map.addLayer({id:'before-greenbuf', type:'fill', source:'mp', filter:fc('common_green_buffer'),
-    paint:{'fill-color':'#94c47d','fill-opacity':0.4},
-    layout:{visibility:'none'}});
-  map.addLayer({id:'before-retslope', type:'fill', source:'mp', filter:fc('common_retaining_slope'),
-    paint:{'fill-color':'#c4936b','fill-opacity':0.55},
+  map.addLayer({id:'cadastre-line', type:'line', source:'cadastre',
+    paint:{'line-color':'#c084fc','line-width':1,'line-dasharray':[2,2],'line-opacity':0.65},
     layout:{visibility:'none'}});
 
-  // 5. Контекст: лоты, общественные, дороги, муниципальная
-  map.addLayer({id:'lots-out', type:'line', source:'mp', filter:fc('residential_lot'),
-    paint:{'line-color':'#fde6c7','line-width':1.0,'line-opacity':0.7}});
-  map.addLayer({id:'public-fill', type:'fill', source:'mp', filter:fc('public_platform'),
-    paint:{'fill-color':'#d77b40','fill-opacity':0.5}});
-  map.addLayer({id:'public-labels', type:'symbol', source:'mp', filter:fc('public_platform'),
-    layout:{'text-field':['get','function_id'],'text-size':11,'text-font':['Open Sans Bold','Arial Unicode MS Bold']},
-    paint:{'text-color':'#fff','text-halo-color':'#000','text-halo-width':1.5}});
-  map.addLayer({id:'roads-vn', type:'line', source:'mp', filter:fc('lot_access_main'),
-    paint:{'line-color':'#3060c0','line-width':3,'line-opacity':0.85}});
-  map.addLayer({id:'roads-gal', type:'line', source:'mp', filter:fc('lot_access_gallery'),
-    paint:{'line-color':'#5a8dd0','line-width':1.4,'line-opacity':0.7}});
-  map.addLayer({id:'mun-line', type:'line', source:'mp', filter:fc('municipal_road_centerline'),
-    paint:{'line-color':'#5a1d12','line-width':2,'line-opacity':0.9}, layout:{visibility:'none'}});
+  // Террасы — 3D extrusion (нормированно)
+  const TC = ['match', ['get','terrace'],
+    'T225','#fecaca', 'T240','#fde68a', 'T255','#bbf7d0',
+    'T270','#bae6fd', 'T280','#e9d5ff', '#888'];
+  const TH = ['match', ['get','terrace'],
+    'T225', 0.5, 'T240', 5, 'T255', 11, 'T270', 16, 'T280', 22, 1];
+  map.addLayer({id:'terraces-extrusion', type:'fill-extrusion', source:'eng', filter:fc('terrace_polygon'),
+    paint:{
+      'fill-extrusion-color':TC,
+      'fill-extrusion-height':TH,
+      'fill-extrusion-base':0,
+      'fill-extrusion-opacity':0.82,
+    }});
+  map.addLayer({id:'terraces-labels', type:'symbol', source:'eng', filter:fc('terrace_polygon'),
+    layout:{'text-field':['concat', ['get','terrace'], ' · ', ['number-format',['get','z_target_m'],{}], ' m'],
+            'text-size':13, 'text-font':['Open Sans Bold','Arial Unicode MS Bold']},
+    paint:{'text-color':'#0a1a0a','text-halo-color':'#fff','text-halo-width':1.6}});
 
-  // Click popups
-  ['terr-T225','terr-T240','terr-T255','terr-T270','terr-T280','wall-gabion','wall-rc','drain-main','drain-terrace','public-fill'].forEach(id => {
+  map.addLayer({id:'walls-corridor', type:'fill', source:'eng', filter:fc('wall_corridor'),
+    paint:{'fill-color':'#fde68a','fill-opacity':0.5,'fill-outline-color':'#a16207'}});
+
+  map.addLayer({id:'walls-line', type:'line', source:'eng', filter:fc('retaining_wall'),
+    paint:{
+      'line-color':['match',['get','wall_type'],
+        'rc_cantilever','#7a1818', 'gabion','#a05030', '#dc2626'],
+      'line-width':5,'line-opacity':0.95
+    }});
+  map.addLayer({id:'walls-labels', type:'symbol', source:'eng', filter:fc('retaining_wall'),
+    layout:{'text-field':['concat', ['get','wall_id'], ' · h=', ['get','height_m'], 'm'],
+            'text-size':10, 'text-font':['Open Sans Semibold','Arial Unicode MS Bold'],
+            'symbol-placement':'line', 'text-offset':[0,-1]},
+    paint:{'text-color':'#fff','text-halo-color':'#000','text-halo-width':1.4}});
+
+  map.addLayer({id:'talweg-line', type:'line', source:'eng', filter:fc('talweg_axis'),
+    paint:{'line-color':'#1d4ed8','line-width':3,'line-dasharray':[2,1.5],'line-opacity':0.95}});
+
+  map.addLayer({id:'lots-line', type:'line', source:'lots',
+    paint:{'line-color':'#1e3a8a','line-width':1.2,'line-opacity':0.8},
+    layout:{visibility:'none'}});
+
+  map.addLayer({id:'muni-corr', type:'fill', source:'muni', filter:fc('municipal_road_corridor'),
+    paint:{'fill-color':'#a87060','fill-opacity':0.55}});
+  map.addLayer({id:'muni-line', type:'line', source:'muni', filter:fc('municipal_road_centerline'),
+    paint:{'line-color':'#5a1d12','line-width':2,'line-opacity':0.95}});
+
+  map.addLayer({id:'ap-circle', type:'circle', source:'eng', filter:fc('access_point'),
+    paint:{'circle-radius':10,'circle-color':'#facc15','circle-stroke-color':'#000','circle-stroke-width':2}});
+  map.addLayer({id:'ap-labels', type:'symbol', source:'eng', filter:fc('access_point'),
+    layout:{'text-field':['get','ap_id'],'text-size':13,'text-offset':[0,-1.6],'text-font':['Open Sans Bold','Arial Unicode MS Bold']},
+    paint:{'text-color':'#fff','text-halo-color':'#5a4400','text-halo-width':1.6}});
+
+  const popupLayers = ['terraces-extrusion','walls-line','walls-corridor','talweg-line','muni-line','ap-circle','lots-line','contours-major','contours-minor'];
+  popupLayers.forEach(id => {
+    if (!map.getLayer(id)) return;
     map.on('click', id, e => {
       const p = e.features[0].properties;
       new mapboxgl.Popup({closeButton:true, maxWidth:'320px'}).setLngLat(e.lngLat).setHTML(renderPopup(p)).addTo(map);
@@ -255,104 +267,71 @@ function setupLayers() {
   document.querySelectorAll('input[data-layer]').forEach(inp => {
     inp.addEventListener('change', e => toggleGroup(e.target.dataset.layer, e.target.checked));
   });
-
-  toggleGroup('municipal', false);
-  setStage('after');  // start in "after" mode
-
-  setTimeout(()=>map.flyTo({center:SITE_CENTER, zoom:17.0, pitch:50, bearing:15, duration:2500, essential:true}), 600);
-}
-
-const AFTER_LAYERS = ['terr-T225','terr-T240','terr-T255','terr-T270','terr-T280',
-  'terr-T225-label','terr-T240-label','terr-T255-label','terr-T270-label','terr-T280-label',
-  'wall-gabion','wall-rc','drain-main','drain-terrace'];
-const BEFORE_LAYERS = ['before-slope25','before-slope25-pattern','before-nobuild','before-greenbuf','before-retslope'];
-
-function setStage(stage) {
-  const after = stage === 'after';
-  AFTER_LAYERS.forEach(id => { if (map.getLayer(id)) map.setLayoutProperty(id,'visibility', after?'visible':'none'); });
-  BEFORE_LAYERS.forEach(id => { if (map.getLayer(id)) map.setLayoutProperty(id,'visibility', after?'none':'visible'); });
-
-  // обновить чекбоксы и кнопки
-  document.querySelectorAll('input[data-layer]').forEach(inp => {
-    const k = inp.dataset.layer;
-    if (['terrace_T225','terrace_T240','terrace_T255','terrace_T270','terrace_T280',
-         'walls_gabion','walls_rc','drain_main','drain_terrace'].includes(k)) {
-      inp.checked = after;
-    }
-    if (['before_slope25','before_nobuild','before_retslope','before_greenbuf'].includes(k)) {
-      inp.checked = !after;
-    }
-  });
-  document.getElementById('stage-before').classList.toggle('active', !after);
-  document.getElementById('stage-after').classList.toggle('active', after);
-
-  // обновить заголовок HUD
-  const subEl = document.querySelector('.hud .sub');
-  if (subEl) subEl.textContent = after
-    ? 'Состояние ПОСЛЕ земляных работ — 5 готовых террас, стены, дренаж'
-    : 'Состояние ДО работ — склон >25°, талвег запретен, без террас';
 }
 
 function renderPopup(p) {
-  const fc = p.feature_class;
-  if (fc==='terrace_polygon') {
-    return `<b>Терраса ${p.terrace}</b><br>z_target = <b>${p.z_target_m} м БС</b><br>
-      Площадь: ${p.area_m2} м²<br>
-      Лотов: ${p.lot_count}<br>
-      Выемка: ${p.cut_m3} м³<br>
-      Насыпь: ${p.fill_m3} м³<br>
-      Нетто (вывоз/завоз): ${p.net_m3 > 0 ? '+' : ''}${p.net_m3} м³`;
+  const map = {feature_class:'pop.fc',terrace:'pop.terrace',z_target_m:'pop.z',
+    wall_id:'pop.wt',wall_type:'pop.wt',height_m:'pop.height',length_m:'pop.length',
+    dz_m:'pop.dz',area_m2:'pop.area',role:'pop.role',ap_id:'pop.ap',lot_id:'pop.lot',
+    front_m:'pop.front',depth_m:'pop.depth'};
+  if (p.z_m !== undefined) {
+    return `<div style="font-size:12px"><b>${p.z_m} m</b> ${p.is_major ? '(major)' : ''}</div>`;
   }
-  if (fc==='retaining_wall') {
-    return `<b>Подпорная стена</b><br>Тип: ${p.wall_type === 'gabion' ? 'габионная' : 'ж/б консольная'}<br>
-      Между: ${p.between}<br>
-      Перепад: ${p.dz_m} м<br>
-      H_расч: ${p.h_design_m} м<br>
-      Длина: ${p.length_m} м`;
-  }
-  if (fc==='drainage_main') return `<b>Талвег (магистральный сток)</b><br>${p.length_m} м<br>${p.pipe_type}<br><i>${p.role}</i>`;
-  if (fc==='drainage_terrace') return `<b>Перехватная канава</b><br>Терраса: ${p.terrace}<br>${p.length_m} м<br>${p.pipe_type}<br><i>${p.role}</i>`;
-  if (fc==='public_platform') return `<b>${p.function_id}</b><br>${p.platform_area_m2 || ''} м²`;
-  return '<pre style="font-size:10px">'+JSON.stringify(p,null,2)+'</pre>';
+  const rows = Object.keys(map).filter(k => p[k] !== undefined && p[k] !== null && p[k] !== '')
+    .map(k => `<div style="display:flex;gap:6px;margin:1px 0"><span style="color:#9bb1c4;min-width:90px">${t(map[k])}:</span><span>${p[k]}</span></div>`);
+  return `<div style="font-size:12px;line-height:1.4">${rows.join('')}</div>`;
 }
 
-function toggleGroup(g, vis) {
-  const map_ = {
-    'terrace_T225':['terr-T225','terr-T225-label'],
-    'terrace_T240':['terr-T240','terr-T240-label'],
-    'terrace_T255':['terr-T255','terr-T255-label'],
-    'terrace_T270':['terr-T270','terr-T270-label'],
-    'terrace_T280':['terr-T280','terr-T280-label'],
-    'walls_gabion':['wall-gabion'], 'walls_rc':['wall-rc'],
-    'drain_main':['drain-main'], 'drain_terrace':['drain-terrace'],
-    'before_slope25':['before-slope25','before-slope25-pattern'],
-    'before_nobuild':['before-nobuild'],
-    'before_retslope':['before-retslope'],
-    'before_greenbuf':['before-greenbuf'],
-    'lots':['lots-out'], 'public':['public-fill','public-labels'],
-    'roads':['roads-vn','roads-gal'], 'municipal':['mun-line'],
-    'site':['site-line']
+function toggleGroup(group, on) {
+  const groups = {
+    terraces: ['terraces-extrusion','terraces-labels'],
+    walls: ['walls-line','walls-labels'],
+    corridors: ['walls-corridor'],
+    talweg: ['talweg-line'],
+    contours: ['contours-minor','contours-major','contours-major-labels'],
+    ap: ['ap-circle','ap-labels'],
+    muni: ['muni-corr','muni-line'],
+    lots: ['lots-line'],
+    cadastre: ['cadastre-line'],
   };
-  (map_[g]||[]).forEach(id => { if (map.getLayer(id)) map.setLayoutProperty(id,'visibility', vis?'visible':'none'); });
+  (groups[group]||[]).forEach(id => {
+    if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
+  });
 }
 
-function flyToBird() { map.flyTo({center:SITE_CENTER, zoom:17.0, pitch:0, bearing:0, duration:2000}); }
-function flyToOrbit() {
-  map.flyTo({center:SITE_CENTER, zoom:17.5, pitch:65, bearing:0, duration:1500});
-  setTimeout(()=>{ const start=performance.now();
-    function rot(){ const t=(performance.now()-start)/1000; map.setBearing((t*8)%360); if (t<45) requestAnimationFrame(rot);} rot();
-  }, 1600);
-}
-function flyToT225() { map.flyTo({center:[41.6779, 41.5806], zoom:18.0, pitch:55, bearing:0, duration:2200}); }
-function resetView() { map.flyTo({center:SITE_CENTER, zoom:17.0, pitch:50, bearing:15, duration:2000}); }
-
-document.getElementById('style-picker').addEventListener('change', e => {
-  const vis = {};
-  document.querySelectorAll('input[data-layer]').forEach(inp => vis[inp.dataset.layer]=inp.checked);
-  map.setStyle(e.target.value);
-  map.once('style.load', () => { setupLayers(); setTimeout(()=> Object.entries(vis).forEach(([g,v]) => toggleGroup(g,v)), 600); });
-});
+map.on('load', setupLayers);
 map.on('style.load', setupLayers);
+document.getElementById('style-picker').addEventListener('change', e => map.setStyle(e.target.value));
+
+const INITIAL = { center: SITE_CENTER, zoom: 17, pitch: 65, bearing: 35 };
+let orbitTimer = null;
+function step(dBearing, dPitch=0) {
+  map.easeTo({
+    bearing: map.getBearing() + dBearing,
+    pitch: Math.max(0, Math.min(75, map.getPitch() + dPitch)),
+    duration: 350, easing: t => t,
+  });
+}
+document.getElementById('rot-l').addEventListener('click', () => step(-30));
+document.getElementById('rot-r').addEventListener('click', () => step(30));
+document.getElementById('pitch-up').addEventListener('click', () => step(0, 10));
+document.getElementById('pitch-dn').addEventListener('click', () => step(0, -10));
+document.getElementById('rot-reset').addEventListener('click', () => {
+  if (orbitTimer) { clearInterval(orbitTimer); orbitTimer = null;
+    document.getElementById('orbit-toggle').classList.remove('active'); }
+  map.flyTo({ ...INITIAL, duration: 1200 });
+});
+document.getElementById('orbit-toggle').addEventListener('click', e => {
+  if (orbitTimer) {
+    clearInterval(orbitTimer); orbitTimer = null;
+    e.target.classList.remove('active');
+  } else {
+    e.target.classList.add('active');
+    orbitTimer = setInterval(() => {
+      map.easeTo({ bearing: map.getBearing() + 1.2, duration: 60, easing: t => t });
+    }, 60);
+  }
+});
 </script>
 </body>
 </html>

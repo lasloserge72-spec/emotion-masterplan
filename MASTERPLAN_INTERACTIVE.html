@@ -1,253 +1,368 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<title>Эмоция — мастер-план посёлка | интерактивная карта</title>
+<title>Эмоция — мастер-план 2D (Leaflet) | v3 Чистая</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
-  .panel {
-    position: absolute; top: 12px; right: 12px; z-index: 1000;
-    background: rgba(255, 255, 255, .96); padding: 12px 14px;
-    border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,.18);
-    max-width: 290px; font-size: 12px; line-height: 1.45;
+  html, body { height: 100%; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; }
+  #map { position:absolute; inset:54px 0 0 0; }
+  .topbar { display:flex; justify-content:space-between; align-items:center;
+    padding:6px 14px; background:#0a1014; border-bottom:1px solid #1a2530; gap:10px; flex-wrap:wrap;
+    height:54px; box-sizing:border-box; color:#eee; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+  .topbar .badge { background:#7a1d1d; color:#fde8e8; padding:4px 10px; border-radius:4px;
+    font-size:10px; font-weight:600; letter-spacing:.4px; text-transform:uppercase; white-space:nowrap; }
+  .topbar .topnav { display:flex; gap:2px; flex-wrap:wrap; }
+  .topbar .topnav a { color:#9bb1c4; padding:6px 10px; border-radius:5px; text-decoration:none; font-size:12px; }
+  .topbar .topnav a:hover { background:#1a2530; color:#cdf; }
+  .topbar .topnav a.active { background:#1c5fa8; color:#fff; }
+  .langs { display:flex; gap:2px; }
+  .langs button { background:#1a2530; color:#9bb1c4; border:1px solid #2a3540;
+    padding:5px 9px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:600; }
+  .langs button:hover { background:#234; color:#cdf; }
+  .langs button.active { background:#1c5fa8; color:#fff; border-color:#1c5fa8; }
+  .legend {
+    background: rgba(255,255,255,0.95);
+    padding: 10px 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 280px;
   }
-  .panel h2 { margin: 0 0 6px; font-size: 14px; }
-  .panel small { color: #666; }
-  .leaflet-popup-content { font-size: 12px; line-height: 1.4; }
-  .leaflet-control-layers-expanded { font-size: 12px; }
+  .legend h3 { margin: 0 0 6px 0; font-size: 13px; }
+  .legend .row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+  .legend .swatch { width: 18px; height: 12px; border: 1px solid #555; flex-shrink: 0; }
+  .legend .stroke { width: 18px; height: 0; border-top: 3px solid; flex-shrink: 0; }
+  .legend .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .stats {
+    background: rgba(255,255,255,0.95);
+    padding: 8px 10px;
+    border-radius: 6px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    font-size: 11px;
+  }
+  .nonres-label {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid #555;
+    padding: 1px 5px;
+    font-size: 10px;
+    font-weight: bold;
+    color: #1f2937;
+  }
+  .lot-label {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid #1e3a8a;
+    padding: 0 3px;
+    font-size: 9px;
+    font-weight: bold;
+    color: #1e3a8a;
+  }
+  .ap-tooltip {
+    background: rgba(250,204,21,0.9);
+    border: 1px solid #000;
+    padding: 0 4px;
+    font-size: 10px;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
-<div id="map"></div>
-<div class="panel">
-  <h2>Эмоция — мастер-план</h2>
-  Хелвачаури / Шарабидзееби, Аджара<br>
-  <small>50 × 335 м² · велнес · 2 пруда для рыбалки · 2 КТП · скважина · no-export</small>
-  <hr style="border: none; border-top: 1px solid #ddd; margin: 8px 0">
-  <div style="font-size: 11px; color: #444">
-    Слои переключаются справа вверху.<br>
-    Подложки: OSM, спутник Esri, рельеф OpenTopoMap.<br>
-    Клик по объекту — карточка с параметрами.
+<div class="topbar">
+  <div class="badge" data-i18n="badge.internal">ВНУТРЕННЕЕ ПРОСТРАНСТВО · ОТЧЁТНОСТЬ КОМАНДЫ ПРОЕКТА</div>
+  <div class="topnav">
+    <a href="index.html" data-i18n="nav.home">Главная</a>
+    <a href="MASTERPLAN_MAPBOX.html" data-i18n="nav.mp3d">3D Мастер-план</a>
+    <a href="MASTERPLAN_EARTHWORKS.html" data-i18n="nav.earth3d">Землеустройство</a>
+    <a class="active" href="MASTERPLAN_INTERACTIVE.html" data-i18n="nav.leaflet">2D Leaflet</a>
+    <a href="villa.html" data-i18n="nav.villa">Вилла</a>
+  </div>
+  <div class="langs">
+    <button data-lang-btn="ru" data-i18n="lang.ru">РУС</button>
+    <button data-lang-btn="en" data-i18n="lang.en">ENG</button>
+    <button data-lang-btn="ka" data-i18n="lang.ka">ქარ</button>
   </div>
 </div>
+<div id="map"></div>
+<script src="i18n.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const center = [41.581612, 41.677857];   // [lat, lon]
+const map = L.map('map', { preferCanvas: false }).setView([41.583, 41.799], 18);
 
-const map = L.map('map', { center, zoom: 18, zoomControl: true });
+const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 22, maxNativeZoom: 19, attribution: '© OpenStreetMap'
+}).addTo(map);
 
-const baseOSM = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  { maxZoom: 19, attribution: '&copy; OpenStreetMap' }
-);
-const baseSat = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  { maxZoom: 19, attribution: 'Esri WorldImagery' }
-).addTo(map);
-const baseTopo = L.tileLayer(
-  'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-  { maxZoom: 17, attribution: '&copy; OpenTopoMap' }
-);
-
-const layers = {
-  site: L.featureGroup(),
-  cadastre: L.featureGroup(),
-  slope25: L.featureGroup(),
-  lots_normal: L.featureGroup(),
-  lots_fill: L.featureGroup(),
-  public: L.featureGroup(),
-  wellness: L.featureGroup(),
-  roads: L.featureGroup(),
-  road_corridors: L.featureGroup(),
-  turnarounds: L.featureGroup(),
-  water: L.featureGroup(),
-  drainage: L.featureGroup(),
-  fishing: L.featureGroup(),
-  electrical: L.featureGroup(),
-  lighting: L.featureGroup()
-};
-
-// Load combined GeoJSON
-fetch('./masterplan_4326.geojson').then(r => r.json()).then(gj => {
-  // Lot meta from CSV is already encoded in lot props by build script
-
-  gj.features.forEach(f => {
-    const props = f.properties || {};
-    const layer = props.layer || props.feature_class || 'misc';
-    let style, popup, target;
-    const id = props.id || props.name || props.function_id || layer;
-
-    if (layer === 'site_boundary') {
-      style = { color: '#000', weight: 3, fill: false };
-      target = layers.site;
-      popup = '<b>Контур участка</b><br>3,98 га';
-    } else if (layer === 'lot') {
-      const slope = parseFloat(props.raw_slope_deg || 0);
-      const isFill = slope > 25;
-      style = isFill
-        ? { color: '#7a3a10', weight: 1, fillColor: '#f5a86c', fillOpacity: 0.85 }
-        : { color: '#666', weight: 0.7, fillColor: '#fff7c2', fillOpacity: 0.7 };
-      target = isFill ? layers.lots_fill : layers.lots_normal;
-      popup = `<b>${id}</b><br>335 м² · ${props.terrace_id} ·` +
-              ` ${slope.toFixed(1)}°<br>` +
-              (isFill ? '<i>Насыпная платформа +2,5 м</i>' : '');
-    } else if (layer === 'public_platform') {
-      const colors = {
-        RESTAURANT: '#d77b40', COMMON: '#5a9a4a',
-        KIDS: '#e6a040', FIT: '#3a8a93', ENTRY: '#7a5fb5'
-      };
-      style = { color: '#000', weight: 1, fillColor: colors[id] || '#888',
-                fillOpacity: 0.92 };
-      target = layers.public;
-      popup = `<b>${id}</b><br>${props.platform_area_m2} м²`;
-    } else if (layer === 'wellness_pavilion') {
-      style = { color: '#1c4a5a', weight: 1, fillColor: '#5b8a9a',
-                fillOpacity: 0.92 };
-      target = layers.wellness;
-      popup = '<b>Велнес-павильон</b><br>200 м² · сауна + хаммам + раздевалки';
-    } else if (layer === 'bathing_tub') {
-      style = { color: '#1c5fa8', weight: 1.5, fillColor: '#4bb1c4',
-                fillOpacity: 0.95, radius: 4 };
-      target = layers.wellness;
-      popup = '<b>Купальня</b><br>3 × 2 м';
-    } else if (layer === 'fishing_pond') {
-      style = { color: '#1c5fa8', weight: 1.5, fillColor: '#7fb3d5',
-                fillOpacity: 0.92, radius: 7 };
-      target = layers.fishing;
-      popup = `<b>${id}</b><br>${props.size_m} м · ${props.area_m2} м²<br>` +
-              'для рыбалки членами посёлка';
-    } else if (layer === 'water_intake') {
-      style = { color: '#1c5fa8', weight: 1.5, fillColor: '#1c5fa8',
-                fillOpacity: 0.95, radius: 6 };
-      target = layers.water;
-      popup = '<b>Водозабор</b><br>Восточный ручей<br>1,5–2,5 л/с (расч.)';
-    } else if (layer === 'borehole') {
-      style = { color: '#1c5fa8', weight: 1.5, fillColor: '#082c52',
-                fillOpacity: 0.95, radius: 6 };
-      target = layers.water;
-      popup = '<b>Скважина</b><br>80–120 м · 1–2 л/с · этап 1';
-    } else if (layer === 'water_accumulator') {
-      style = { color: '#3070b8', weight: 1.5, fillColor: '#3070b8',
-                fillOpacity: 0.95, radius: 5 };
-      target = layers.water;
-      popup = `<b>${id}</b><br>${props.vol_m3} м³ · ` +
-              `~${props.elev_m_aprx} м БС`;
-    } else if (layer === 'drainage_line') {
-      style = { color: '#3070b8', weight: 3 };
-      target = layers.drainage;
-      popup = '<b>Талвег H–H\'</b><br>379 м · сток до 0,95 м³/с';
-    } else if (layer === 'creek_receiver_concept') {
-      style = { color: '#7fb3d5', weight: 2, dashArray: '4,2' };
-      target = layers.drainage;
-      popup = '<b>Ручей-приёмник (NW)</b>';
-    } else if (layer === 'outfall_point') {
-      style = { color: '#a82828', weight: 2, fillColor: '#cc4040',
-                fillOpacity: 0.95, radius: 5 };
-      target = layers.drainage;
-      popup = '<b>Контролируемый выпуск H\'</b><br>z ≈ 205 м БС';
-    } else if (layer === 'road_centerline') {
-      style = { color: '#2a7a2a', weight: 2.6 };
-      target = layers.roads;
-      popup = `<b>Дорога ${id}</b>`;
-    } else if (layer === 'road_corridor_6m_concept') {
-      style = { color: '#a07050', weight: 0, fillColor: '#d2a474',
-                fillOpacity: 0.4 };
-      target = layers.road_corridors;
-    } else if (layer === 'turnaround_point') {
-      const fire = id === 'TRN_WEST';
-      style = { color: fire ? '#a02828' : '#c43',
-                weight: 1.5, fillColor: fire ? '#fdebe6' : '#f8e0a0',
-                fillOpacity: 0.85, radius: 9, dashArray: fire ? '4,3' : '2,2' };
-      target = layers.turnarounds;
-      popup = fire
-        ? '<b>Резервный пожарный въезд</b><br>R = 9 м'
-        : `<b>Разворот ${id}</b><br>R = 9 м`;
-    } else if (layer === 'hv_input') {
-      style = { color: '#a02828', weight: 1.5, fillColor: '#a02828',
-                fillOpacity: 0.95, radius: 7 };
-      target = layers.electrical;
-      popup = '<b>HV ввод 10 кВ</b>';
-    } else if (layer === 'ktp') {
-      style = { color: '#a02828', weight: 1.5, fillColor: '#a02828',
-                fillOpacity: 0.95, radius: 6 };
-      target = layers.electrical;
-      popup = `<b>${props.name}</b>`;
-    } else if (layer === 'lighting_column') {
-      style = { color: '#a87010', weight: 0.5, fillColor: '#f0c020',
-                fillOpacity: 0.85, radius: 2 };
-      target = layers.lighting;
-      popup = `<b>Опора ${id}</b><br>LED 60 Вт · 6 м`;
-    } else if (layer === 'raw_slope_gt25_dem') {
-      style = { color: '#c33', weight: 0.5, fillColor: 'transparent',
-                fillOpacity: 0, dashArray: '3,3' };
-      target = layers.slope25;
-      popup = '<b>Зона естественного склона >25°</b>';
-    } else {
-      return;  // skip unknown
-    }
-
-    const geomType = f.geometry.type;
-    let lay;
-    if (geomType === 'Point') {
-      lay = L.circleMarker([f.geometry.coordinates[1], f.geometry.coordinates[0]],
-                            style);
-    } else {
-      lay = L.geoJSON(f, { style: () => style,
-                            pointToLayer: (feat, latlng) =>
-                              L.circleMarker(latlng, style) });
-    }
-    if (popup) lay.bindPopup(popup);
-    lay.addTo(target);
-  });
-
-  // Add layers in z-order
-  layers.site.addTo(map);
-  layers.road_corridors.addTo(map);
-  layers.lots_normal.addTo(map);
-  layers.lots_fill.addTo(map);
-  layers.public.addTo(map);
-  layers.wellness.addTo(map);
-  layers.roads.addTo(map);
-  layers.turnarounds.addTo(map);
-  layers.drainage.addTo(map);
-  layers.water.addTo(map);
-  layers.fishing.addTo(map);
-  layers.electrical.addTo(map);
-  layers.lighting.addTo(map);
-
-  // Fit to site bounds
-  if (layers.site.getLayers().length > 0) {
-    map.fitBounds(layers.site.getBounds(), { padding: [40, 40] });
-  }
+const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 22, maxNativeZoom: 19, attribution: 'Esri World Imagery'
 });
 
-// Layer control
-const overlays = {
-  'Контур участка': layers.site,
-  'Жилые участки (естеств.)': layers.lots_normal,
-  'Жилые участки (насыпь)': layers.lots_fill,
-  'Общественные платформы': layers.public,
-  'Велнес-кластер': layers.wellness,
-  'Дороги (оси)': layers.roads,
-  'Дорожные коридоры 6 м': layers.road_corridors,
-  'Развороты R = 9': layers.turnarounds,
-  'Вода (источники, накопители)': layers.water,
-  'Дренаж H–H\'': layers.drainage,
-  'Рыболовные пруды': layers.fishing,
-  'Электро (КТП, HV)': layers.electrical,
-  'Освещение (34 опоры)': layers.lighting,
-  'Склон >25° (информ.)': layers.slope25
+const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+  maxZoom: 17, attribution: '© OpenTopoMap'
+});
+
+const TERR_COLOR = {
+  'T240': '#fde68a', 'T255': '#bbf7d0', 'T270': '#bae6fd',
+  'T280': '#e9d5ff', 'T225': '#fecaca',
 };
-const bases = {
-  'Спутник (Esri)': baseSat,
-  'OSM': baseOSM,
-  'Рельеф (OpenTopoMap)': baseTopo
-};
-L.control.layers(bases, overlays, { collapsed: false }).addTo(map);
-L.control.scale({ imperial: false }).addTo(map);
+
+async function loadJSON(url) {
+  const r = await fetch(url + '?t=' + Date.now());
+  return r.json();
+}
+
+function styleSite() { return { color: '#374151', weight: 2, fillOpacity: 0.0, dashArray: '4,3' }; }
+
+function styleTerrace(f) {
+  const t = f.properties.terrace;
+  return { color: '#6b7280', weight: 1, fillColor: TERR_COLOR[t] || '#ddd', fillOpacity: 0.5 };
+}
+
+function styleEng(f) {
+  const fc = f.properties.feature_class;
+  if (fc === 'wall_corridor') return { color: '#a16207', weight: 1, fillColor: '#fde68a', fillOpacity: 0.3, dashArray: '2,2' };
+  if (fc === 'retaining_wall') return { color: '#dc2626', weight: 3 };
+  if (fc === 'talweg_axis') return { color: '#1d4ed8', weight: 2 };
+  if (fc === 'terrace_polygon') return styleTerrace(f);
+  return { color: '#666', weight: 1 };
+}
+
+function styleMuni(f) {
+  if (f.properties.feature_class === 'municipal_road_corridor')
+    return { color: '#9ca3af', weight: 1, fillColor: '#e5e7eb', fillOpacity: 0.6 };
+  return { color: '#4b5563', weight: 3 };
+}
+
+function styleRoad(f) {
+  const fc = f.properties.feature_class;
+  if (fc === 'road_street') return { color: '#ea580c', weight: 5, opacity: 0.95 };
+  if (fc === 'road_inner') return { color: '#fb923c', weight: 5, opacity: 0.95 };
+  if (fc === 'road_inner_link') return { color: '#fb923c', weight: 4, opacity: 0.85 };
+  if (fc === 'road_branch') return { color: '#c2410c', weight: 4, opacity: 0.95 };
+  if (fc === 'road_connector') return { color: '#f97316', weight: 4, opacity: 0.95, dashArray: '6,3' };
+  if (fc === 'road_guest') return { color: '#9333ea', weight: 5, opacity: 0.95 };
+  if (fc === 'road_connector_guest') return { color: '#a855f7', weight: 4, opacity: 0.95, dashArray: '6,3' };
+  if (fc === 'turnaround') return { color: '#ea580c', weight: 1, fillColor: '#fb923c', fillOpacity: 0.7 };
+  if (fc === 'passing_pocket') return { color: '#ea580c', weight: 1, fillColor: '#fdba74', fillOpacity: 0.7 };
+  if (fc === 'guest_parking') return { color: '#7e22ce', weight: 1, fillColor: '#d8b4fe', fillOpacity: 0.6 };
+  return { color: '#000', weight: 2 };
+}
+
+function styleNonres(f) {
+  const fc = f.properties.feature_class;
+  if (fc === 'wellness_center') return { color: '#0369a1', weight: 2, fillColor: '#38bdf8', fillOpacity: 0.75 };
+  if (fc === 'restaurant') return { color: '#92400e', weight: 2, fillColor: '#f59e0b', fillOpacity: 0.75 };
+  if (fc === 'guest_parking') return { color: '#7e22ce', weight: 1, fillColor: '#d8b4fe', fillOpacity: 0.6 };
+  if (fc === 'transformer') return { color: '#000', weight: 2, fillColor: '#facc15', fillOpacity: 0.9 };
+  if (fc === 'service_garage') return { color: '#1f2937', weight: 2, fillColor: '#9ca3af', fillOpacity: 0.8 };
+  if (fc === 'waste_platform') return { color: '#374151', weight: 2, fillColor: '#4b5563', fillOpacity: 0.7 };
+  if (fc === 'septic') return { color: '#166534', weight: 2, fillColor: '#15803d', fillOpacity: 0.75 };
+  if (fc === 'playground_common') return { color: '#15803d', weight: 2, fillColor: '#86efac', fillOpacity: 0.7 };
+  if (fc === 'picnic_area') return { color: '#854d0e', weight: 2, fillColor: '#fde047', fillOpacity: 0.55 };
+  return { color: '#000', weight: 2 };
+}
+
+function nonresLabel(f) {
+  const m = {'wellness_center':'ВЕЛНЕС','restaurant':'РЕСТОРАН','guest_parking':'P','transformer':'ТП',
+    'service_garage':'СЕРВИС','waste_platform':'ТБО','septic':'С','playground_common':'ДЕТСКАЯ','picnic_area':'ПИКНИК'};
+  return m[f.properties.feature_class] || f.properties.feature_class;
+}
+
+function popupNonres(f, layer) {
+  const p = f.properties;
+  const lines = [`<b>${p.feature_class}</b>`];
+  if (p.role) lines.push(p.role);
+  if (p.terrace) lines.push(`Терраса: ${p.terrace}`);
+  if (p.size_m) lines.push(`Размер: ${p.size_m.join(' × ')} м`);
+  if (p.area_m2) lines.push(`Площадь: ${p.area_m2} м²`);
+  layer.bindPopup(lines.join('<br>'));
+}
+
+function popupRoad(f, layer) {
+  const p = f.properties;
+  const lines = [`<b>${p.feature_class}</b>`];
+  if (p.terrace) lines.push(`Терраса: ${p.terrace}`);
+  if (p.role) lines.push(p.role);
+  if (p.length_m !== undefined) lines.push(`Длина: ${p.length_m} м`);
+  if (p.width_m) lines.push(`Ширина: ${p.width_m} м`);
+  if (p.area_m2) lines.push(`Площадь: ${p.area_m2} м²`);
+  layer.bindPopup(lines.join('<br>'));
+}
+
+function popupEng(f, layer) {
+  const p = f.properties;
+  const lines = [`<b>${p.feature_class}</b>`];
+  if (p.terrace) lines.push(`Терраса: ${p.terrace}`);
+  if (p.z_target_m) lines.push(`Z: ${p.z_target_m} м`);
+  if (p.role) lines.push(p.role);
+  if (p.area_m2) lines.push(`Площадь: ${p.area_m2} м²`);
+  if (p.length_m) lines.push(`Длина: ${p.length_m} м`);
+  if (p.height_m) lines.push(`Высота стены: ${p.height_m} м`);
+  if (p.dz_m) lines.push(`Перепад: ${p.dz_m} м`);
+  if (p.ap_id) lines.push(`AP: ${p.ap_id}`);
+  layer.bindPopup(lines.join('<br>'));
+}
+
+(async () => {
+  const [siteFC, engFC, muniFC, roadsFC, nonresFC, lotsFC, parcelsFC, contoursFC] = await Promise.all([
+    loadJSON('site_4326.geojson'),
+    loadJSON('engineering_4326.geojson'),
+    loadJSON('municipal_road_4326.geojson'),
+    loadJSON('roads_4326.geojson'),
+    loadJSON('nonres_4326.geojson'),
+    loadJSON('lots_4326.geojson'),
+    loadJSON('parcels_khelvachauri.geojson').catch(() => null),
+    loadJSON('topo/dem_contours_4326.geojson').catch(() => null),
+  ]);
+
+  const siteLayer = L.geoJSON(siteFC, { style: styleSite }).addTo(map);
+  const muniLayer = L.geoJSON(muniFC, { style: styleMuni, onEachFeature: popupEng }).addTo(map);
+
+  const terracesLayer = L.geoJSON(engFC, {
+    filter: f => f.properties.feature_class === 'terrace_polygon',
+    style: styleEng, onEachFeature: popupEng,
+  }).addTo(map);
+
+  const wallsLayer = L.geoJSON(engFC, {
+    filter: f => ['wall_corridor', 'retaining_wall'].includes(f.properties.feature_class),
+    style: styleEng, onEachFeature: popupEng,
+  }).addTo(map);
+
+  const talwegLayer = L.geoJSON(engFC, {
+    filter: f => f.properties.feature_class === 'talweg_axis',
+    style: styleEng, onEachFeature: popupEng,
+  }).addTo(map);
+
+  const apLayer = L.geoJSON(engFC, {
+    filter: f => f.properties.feature_class === 'access_point',
+    pointToLayer: (f, ll) => L.circleMarker(ll, { radius: 7, color: '#000', fillColor: '#facc15', fillOpacity: 1, weight: 2 }),
+    onEachFeature: (f, layer) => {
+      layer.bindTooltip(f.properties.ap_id, { permanent: true, offset: [10, 0], className: 'ap-tooltip' });
+      popupEng(f, layer);
+    },
+  }).addTo(map);
+
+  const roadsLayer = L.geoJSON(roadsFC, { style: styleRoad, onEachFeature: popupRoad }).addTo(map);
+
+  const nonresLayer = L.geoJSON(nonresFC, {
+    style: styleNonres,
+    onEachFeature: (f, layer) => {
+      layer.bindTooltip(nonresLabel(f), { permanent: true, direction: 'center', className: 'nonres-label' });
+      popupNonres(f, layer);
+    },
+  }).addTo(map);
+
+  const lotsLayer = L.geoJSON(lotsFC, {
+    style: () => ({ color: '#1e3a8a', weight: 1.5, fillColor: '#dbeafe', fillOpacity: 0.7 }),
+    onEachFeature: (f, layer) => {
+      const p = f.properties;
+      layer.bindTooltip(p.lot_id, { permanent: true, direction: 'center', className: 'lot-label' });
+      const lines = [`<b>${p.lot_id}</b>`,
+        `Терраса: ${p.terrace}`,
+        `Фронт × глубина: ${p.front_m} × ${p.depth_m} м`,
+        `Площадь: ${p.area_m2} м²`];
+      layer.bindPopup(lines.join('<br>'));
+    },
+  }).addTo(map);
+
+  let parcelsLayer = null;
+  if (parcelsFC) {
+    parcelsLayer = L.geoJSON(parcelsFC, {
+      style: { color: '#9333ea', weight: 1, fillOpacity: 0, dashArray: '5,3' },
+    });
+  }
+
+  let contoursLayer = null;
+  if (contoursFC) {
+    contoursLayer = L.geoJSON(contoursFC, {
+      style: f => f.properties.is_major
+        ? { color: '#6a4818', weight: 1.2, opacity: 0.85 }
+        : { color: '#a07840', weight: 0.6, opacity: 0.55 },
+      onEachFeature: (f, layer) => layer.bindTooltip(`${f.properties.z_m} м`, { sticky: true }),
+    });
+  }
+
+  map.fitBounds(siteLayer.getBounds(), { padding: [30, 30] });
+
+  const legend = L.control({ position: 'topright' });
+  legend.onAdd = () => {
+    const div = L.DomUtil.create('div', 'legend');
+    div.innerHTML = `
+      <h3>Эмоция v3 — мастер-план 2D</h3>
+      <div style="margin-bottom:6px;font-size:11px;color:#444">50 жилых лотов · 5 террас · дороги 4м</div>
+      <div class="row"><span class="swatch" style="background:#dbeafe;border-color:#1e3a8a"></span><b>Жилые лоты</b> 50/50</div>
+      <div class="row"><span class="swatch" style="background:#38bdf8"></span>Велнес 780 м²</div>
+      <div class="row"><span class="swatch" style="background:#f59e0b"></span>Ресторан 520 м²</div>
+      <div class="row"><span class="swatch" style="background:#d8b4fe"></span>Гостевая парковка</div>
+      <div class="row"><span class="swatch" style="background:#facc15"></span>ТП ×2</div>
+      <div class="row"><span class="swatch" style="background:#15803d"></span>Септики ×6</div>
+      <div class="row"><span class="swatch" style="background:#9ca3af"></span>Сервис УК / ТБО</div>
+      <div class="row"><span class="swatch" style="background:#fde047"></span>Пикник у талвега</div>
+      <hr style="border:none;border-top:1px solid #ddd;margin:6px 0">
+      <div class="row"><span class="stroke" style="border-color:#ea580c;border-width:5px"></span>Улица 4м</div>
+      <div class="row"><span class="stroke" style="border-color:#c2410c;border-width:4px"></span>Ветвь к AP</div>
+      <div class="row"><span class="stroke" style="border-color:#f97316;border-style:dashed"></span>Съезд с муниципалки</div>
+      <div class="row"><span class="swatch" style="background:#fb923c"></span>Разворот / карман</div>
+      <hr style="border:none;border-top:1px solid #ddd;margin:6px 0">
+      <div class="row"><span class="dot" style="background:#facc15;border:1px solid #000"></span>Access Point (AP)</div>
+      <div class="row"><span class="stroke" style="border-color:#dc2626;border-width:3px"></span>Подпорная стена</div>
+      <div class="row"><span class="stroke" style="border-color:#1d4ed8"></span>Талвег</div>
+      <div class="row"><span class="stroke" style="border-color:#4b5563;border-width:3px"></span>Муниципальная дорога</div>
+      <hr style="border:none;border-top:1px solid #ddd;margin:6px 0">
+      <div class="row"><span class="swatch" style="background:#fde68a"></span>T240 (243м)</div>
+      <div class="row"><span class="swatch" style="background:#bbf7d0"></span>T255 (258м)</div>
+      <div class="row"><span class="swatch" style="background:#bae6fd"></span>T270 (269м)</div>
+      <div class="row"><span class="swatch" style="background:#e9d5ff"></span>T280 (280м)</div>
+      <div class="row"><span class="swatch" style="background:#fecaca"></span>T225 (227м, талвег)</div>
+    `;
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+  };
+  legend.addTo(map);
+
+  let total_lin = 0, total_area = 0;
+  roadsFC.features.forEach(f => {
+    const fc = f.properties.feature_class;
+    if (['road_street','road_inner','road_inner_link','road_branch','road_connector','road_guest','road_connector_guest'].includes(fc) && f.properties.length_m)
+      total_lin += f.properties.length_m;
+    if (['turnaround','passing_pocket','guest_parking'].includes(fc) && f.properties.area_m2)
+      total_area += f.properties.area_m2;
+  });
+  let total_nonres = 0, total_lots = 0;
+  nonresFC.features.forEach(f => { if (f.properties.area_m2) total_nonres += f.properties.area_m2; });
+  lotsFC.features.forEach(f => { if (f.properties.area_m2) total_lots += f.properties.area_m2; });
+
+  const stats = L.control({ position: 'bottomleft' });
+  stats.onAdd = () => {
+    const div = L.DomUtil.create('div', 'stats');
+    div.innerHTML = `
+      <b>Лоты:</b> ${lotsFC.features.length} шт, Σ ${total_lots.toFixed(0)} м² (среднее ${(total_lots/lotsFC.features.length).toFixed(0)} м²)<br>
+      <b>Дороги:</b> ${total_lin.toFixed(0)} м · ${(total_lin*4).toFixed(0)} м² (4м) + ${total_area.toFixed(0)} м² (развороты/карманы)<br>
+      <b>Нежилое:</b> ${total_nonres.toFixed(0)} м²<br>
+      <b>Footprint:</b> ${(total_lots + total_lin*4 + total_area + total_nonres).toFixed(0)} м² / 39 848 м² (${(100*(total_lots + total_lin*4 + total_area + total_nonres)/39848).toFixed(0)}%)
+    `;
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+  };
+  stats.addTo(map);
+
+  const baseMaps = { 'OSM': osm, 'Спутник (Esri)': sat, 'OpenTopoMap': topo };
+  const overlays = {
+    'Жилые лоты': lotsLayer,
+    'Нежилое': nonresLayer,
+    'Дороги': roadsLayer,
+    'Террасы': terracesLayer,
+    'Стены / коридоры': wallsLayer,
+    'Талвег': talwegLayer,
+    'AP': apLayer,
+    'Муниципальная дорога': muniLayer,
+    'Граница участка': siteLayer,
+  };
+  if (contoursLayer) overlays['Изолинии 1 м (DEM)'] = contoursLayer;
+  if (parcelsLayer) overlays['Кадастровые границы'] = parcelsLayer;
+  L.control.layers(baseMaps, overlays, { collapsed: false }).addTo(map);
+})();
 </script>
 </body>
 </html>

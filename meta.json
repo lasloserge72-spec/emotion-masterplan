@@ -1,0 +1,54 @@
+{
+  "origin_utm": [
+    222956,
+    4608454
+  ],
+  "size_m": [
+    229,
+    406
+  ],
+  "cell_m": 1.0,
+  "crs": "EPSG:32638",
+  "z_unit": "м БС",
+  "terraces": {
+    "T225": 227.1,
+    "T240": 242.7,
+    "T255": 257.7,
+    "T270": 268.6,
+    "T280": 280.0
+  },
+  "note": "Локальные координаты (Xl, Yl): X_utm = X0 + Xl, Y_utm = Y0 + Yl. Ячейка [iy, ix] соответствует точке (X0+ix+0.5, Y0+iy+0.5) UTM.",
+  "origin_utm_xy": {
+    "X0": 222956,
+    "Y0": 4608454
+  },
+  "site_bbox_local": {
+    "X": [
+      0,
+      229
+    ],
+    "Y": [
+      0,
+      406
+    ]
+  },
+  "site_bbox_utm": {
+    "X": [
+      222956,
+      223185
+    ],
+    "Y": [
+      4608454,
+      4608860
+    ]
+  },
+  "files": {
+    "site": "site_utm.geojson + site_4326.geojson",
+    "grid": "grid_4326.geojson",
+    "municipal_road": "municipal_road_utm.geojson + _4326.geojson",
+    "engineering": "engineering_utm.geojson + _4326.geojson",
+    "dem": "topo/dem.npy",
+    "contours": "topo/dem_contours_4326.geojson",
+    "elevation_grid": "topo/elevation_grid.csv"
+  }
+}

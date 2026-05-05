@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Эмоция — мастер-план посёлка | интерактивная карта</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+  .panel {
+    position: absolute; top: 12px; right: 12px; z-index: 1000;
+    background: rgba(255, 255, 255, .96); padding: 12px 14px;
+    border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    max-width: 290px; font-size: 12px; line-height: 1.45;
+  }
+  .panel h2 { margin: 0 0 6px; font-size: 14px; }
+  .panel small { color: #666; }
+  .leaflet-popup-content { font-size: 12px; line-height: 1.4; }
+  .leaflet-control-layers-expanded { font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="panel">
+  <h2>Эмоция — мастер-план</h2>
+  Хелвачаури / Шарабидзееби, Аджара<br>
+  <small>50 × 335 м² · велнес · 2 пруда для рыбалки · 2 КТП · скважина · no-export</small>
+  <hr style="border: none; border-top: 1px solid #ddd; margin: 8px 0">
+  <div style="font-size: 11px; color: #444">
+    Слои переключаются справа вверху.<br>
+    Подложки: OSM, спутник Esri, рельеф OpenTopoMap.<br>
+    Клик по объекту — карточка с параметрами.
+  </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const center = [41.581612, 41.677857];   // [lat, lon]
+
+const map = L.map('map', { center, zoom: 18, zoomControl: true });
+
+const baseOSM = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  { maxZoom: 19, attribution: '&copy; OpenStreetMap' }
+);
+const baseSat = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  { maxZoom: 19, attribution: 'Esri WorldImagery' }
+).addTo(map);
+const baseTopo = L.tileLayer(
+  'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+  { maxZoom: 17, attribution: '&copy; OpenTopoMap' }
+);
+
+const layers = {
+  site: L.featureGroup(),
+  cadastre: L.featureGroup(),
+  slope25: L.featureGroup(),
+  lots_normal: L.featureGroup(),
+  lots_fill: L.featureGroup(),
+  public: L.featureGroup(),
+  wellness: L.featureGroup(),
+  roads: L.featureGroup(),
+  road_corridors: L.featureGroup(),
+  turnarounds: L.featureGroup(),
+  water: L.featureGroup(),
+  drainage: L.featureGroup(),
+  fishing: L.featureGroup(),
+  electrical: L.featureGroup(),
+  lighting: L.featureGroup()
+};
+
+// Load combined GeoJSON
+fetch('./masterplan_4326.geojson').then(r => r.json()).then(gj => {
+  // Lot meta from CSV is already encoded in lot props by build script
+
+  gj.features.forEach(f => {
+    const props = f.properties || {};
+    const layer = props.layer || props.feature_class || 'misc';
+    let style, popup, target;
+    const id = props.id || props.name || props.function_id || layer;
+
+    if (layer === 'site_boundary') {
+      style = { color: '#000', weight: 3, fill: false };
+      target = layers.site;
+      popup = '<b>Контур участка</b><br>3,98 га';
+    } else if (layer === 'lot') {
+      const slope = parseFloat(props.raw_slope_deg || 0);
+      const isFill = slope > 25;
+      style = isFill
+        ? { color: '#7a3a10', weight: 1, fillColor: '#f5a86c', fillOpacity: 0.85 }
+        : { color: '#666', weight: 0.7, fillColor: '#fff7c2', fillOpacity: 0.7 };
+      target = isFill ? layers.lots_fill : layers.lots_normal;
+      popup = `<b>${id}</b><br>335 м² · ${props.terrace_id} ·` +
+              ` ${slope.toFixed(1)}°<br>` +
+              (isFill ? '<i>Насыпная платформа +2,5 м</i>' : '');
+    } else if (layer === 'public_platform') {
+      const colors = {
+        RESTAURANT: '#d77b40', COMMON: '#5a9a4a',
+        KIDS: '#e6a040', FIT: '#3a8a93', ENTRY: '#7a5fb5'
+      };
+      style = { color: '#000', weight: 1, fillColor: colors[id] || '#888',
+                fillOpacity: 0.92 };
+      target = layers.public;
+      popup = `<b>${id}</b><br>${props.platform_area_m2} м²`;
+    } else if (layer === 'wellness_pavilion') {
+      style = { color: '#1c4a5a', weight: 1, fillColor: '#5b8a9a',
+                fillOpacity: 0.92 };
+      target = layers.wellness;
+      popup = '<b>Велнес-павильон</b><br>200 м² · сауна + хаммам + раздевалки';
+    } else if (layer === 'bathing_tub') {
+      style = { color: '#1c5fa8', weight: 1.5, fillColor: '#4bb1c4',
+                fillOpacity: 0.95, radius: 4 };
+      target = layers.wellness;
+      popup = '<b>Купальня</b><br>3 × 2 м';
+    } else if (layer === 'fishing_pond') {
+      style = { color: '#1c5fa8', weight: 1.5, fillColor: '#7fb3d5',
+                fillOpacity: 0.92, radius: 7 };
+      target = layers.fishing;
+      popup = `<b>${id}</b><br>${props.size_m} м · ${props.area_m2} м²<br>` +
+              'для рыбалки членами посёлка';
+    } else if (layer === 'water_intake') {
+      style = { color: '#1c5fa8', weight: 1.5, fillColor: '#1c5fa8',
+                fillOpacity: 0.95, radius: 6 };
+      target = layers.water;
+      popup = '<b>Водозабор</b><br>Восточный ручей<br>1,5–2,5 л/с (расч.)';
+    } else if (layer === 'borehole') {
+      style = { color: '#1c5fa8', weight: 1.5, fillColor: '#082c52',
+                fillOpacity: 0.95, radius: 6 };
+      target = layers.water;
+      popup = '<b>Скважина</b><br>80–120 м · 1–2 л/с · этап 1';
+    } else if (layer === 'water_accumulator') {
+      style = { color: '#3070b8', weight: 1.5, fillColor: '#3070b8',
+                fillOpacity: 0.95, radius: 5 };
+      target = layers.water;
+      popup = `<b>${id}</b><br>${props.vol_m3} м³ · ` +
+              `~${props.elev_m_aprx} м БС`;
+    } else if (layer === 'drainage_line') {
+      style = { color: '#3070b8', weight: 3 };
+      target = layers.drainage;
+      popup = '<b>Талвег H–H\'</b><br>379 м · сток до 0,95 м³/с';
+    } else if (layer === 'creek_receiver_concept') {
+      style = { color: '#7fb3d5', weight: 2, dashArray: '4,2' };
+      target = layers.drainage;
+      popup = '<b>Ручей-приёмник (NW)</b>';
+    } else if (layer === 'outfall_point') {
+      style = { color: '#a82828', weight: 2, fillColor: '#cc4040',
+                fillOpacity: 0.95, radius: 5 };
+      target = layers.drainage;
+      popup = '<b>Контролируемый выпуск H\'</b><br>z ≈ 205 м БС';
+    } else if (layer === 'road_centerline') {
+      style = { color: '#2a7a2a', weight: 2.6 };
+      target = layers.roads;
+      popup = `<b>Дорога ${id}</b>`;
+    } else if (layer === 'road_corridor_6m_concept') {
+      style = { color: '#a07050', weight: 0, fillColor: '#d2a474',
+                fillOpacity: 0.4 };
+      target = layers.road_corridors;
+    } else if (layer === 'turnaround_point') {
+      const fire = id === 'TRN_WEST';
+      style = { color: fire ? '#a02828' : '#c43',
+                weight: 1.5, fillColor: fire ? '#fdebe6' : '#f8e0a0',
+                fillOpacity: 0.85, radius: 9, dashArray: fire ? '4,3' : '2,2' };
+      target = layers.turnarounds;
+      popup = fire
+        ? '<b>Резервный пожарный въезд</b><br>R = 9 м'
+        : `<b>Разворот ${id}</b><br>R = 9 м`;
+    } else if (layer === 'hv_input') {
+      style = { color: '#a02828', weight: 1.5, fillColor: '#a02828',
+                fillOpacity: 0.95, radius: 7 };
+      target = layers.electrical;
+      popup = '<b>HV ввод 10 кВ</b>';
+    } else if (layer === 'ktp') {
+      style = { color: '#a02828', weight: 1.5, fillColor: '#a02828',
+                fillOpacity: 0.95, radius: 6 };
+      target = layers.electrical;
+      popup = `<b>${props.name}</b>`;
+    } else if (layer === 'lighting_column') {
+      style = { color: '#a87010', weight: 0.5, fillColor: '#f0c020',
+                fillOpacity: 0.85, radius: 2 };
+      target = layers.lighting;
+      popup = `<b>Опора ${id}</b><br>LED 60 Вт · 6 м`;
+    } else if (layer === 'raw_slope_gt25_dem') {
+      style = { color: '#c33', weight: 0.5, fillColor: 'transparent',
+                fillOpacity: 0, dashArray: '3,3' };
+      target = layers.slope25;
+      popup = '<b>Зона естественного склона >25°</b>';
+    } else {
+      return;  // skip unknown
+    }
+
+    const geomType = f.geometry.type;
+    let lay;
+    if (geomType === 'Point') {
+      lay = L.circleMarker([f.geometry.coordinates[1], f.geometry.coordinates[0]],
+                            style);
+    } else {
+      lay = L.geoJSON(f, { style: () => style,
+                            pointToLayer: (feat, latlng) =>
+                              L.circleMarker(latlng, style) });
+    }
+    if (popup) lay.bindPopup(popup);
+    lay.addTo(target);
+  });
+
+  // Add layers in z-order
+  layers.site.addTo(map);
+  layers.road_corridors.addTo(map);
+  layers.lots_normal.addTo(map);
+  layers.lots_fill.addTo(map);
+  layers.public.addTo(map);
+  layers.wellness.addTo(map);
+  layers.roads.addTo(map);
+  layers.turnarounds.addTo(map);
+  layers.drainage.addTo(map);
+  layers.water.addTo(map);
+  layers.fishing.addTo(map);
+  layers.electrical.addTo(map);
+  layers.lighting.addTo(map);
+
+  // Fit to site bounds
+  if (layers.site.getLayers().length > 0) {
+    map.fitBounds(layers.site.getBounds(), { padding: [40, 40] });
+  }
+});
+
+// Layer control
+const overlays = {
+  'Контур участка': layers.site,
+  'Жилые участки (естеств.)': layers.lots_normal,
+  'Жилые участки (насыпь)': layers.lots_fill,
+  'Общественные платформы': layers.public,
+  'Велнес-кластер': layers.wellness,
+  'Дороги (оси)': layers.roads,
+  'Дорожные коридоры 6 м': layers.road_corridors,
+  'Развороты R = 9': layers.turnarounds,
+  'Вода (источники, накопители)': layers.water,
+  'Дренаж H–H\'': layers.drainage,
+  'Рыболовные пруды': layers.fishing,
+  'Электро (КТП, HV)': layers.electrical,
+  'Освещение (34 опоры)': layers.lighting,
+  'Склон >25° (информ.)': layers.slope25
+};
+const bases = {
+  'Спутник (Esri)': baseSat,
+  'OSM': baseOSM,
+  'Рельеф (OpenTopoMap)': baseTopo
+};
+L.control.layers(bases, overlays, { collapsed: false }).addTo(map);
+L.control.scale({ imperial: false }).addTo(map);
+</script>
+</body>
+</html>
