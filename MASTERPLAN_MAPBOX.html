@@ -211,24 +211,34 @@ function setupLayers() {
     }, 'water');
   }
 
-  // Load combined GeoJSON
-  fetch('./masterplan_4326.geojson').then(r => r.json()).then(gj => {
-    if (map.getSource('mp')) return;
-    map.addSource('mp', { type: 'geojson', data: gj });
+  // Vector tileset (uploaded to Mapbox Studio)
+  const TILESET_ID = 'rakamy.2h5lbxoo';
+  const SOURCE_LAYER = 'masterplan_4326-3eatgw';
+
+  (function setupSources() {
+    if (map.getSource('mp')) return Promise.resolve();
+    map.addSource('mp', {
+      type: 'vector',
+      url: 'mapbox://' + TILESET_ID,
+    });
     map.addSource('cadastre', {
       type: 'geojson',
       data: './parcels_khelvachauri.geojson',
     });
+    return Promise.resolve();
+  })().then(() => {
 
     // Helper to filter by layer property
     const f = v => ['==', ['get', 'layer'], v];
     const fc = v => ['==', ['get', 'feature_class'], v];
+    const SL = SOURCE_LAYER;  // shorthand
 
     // Site boundary
     map.addLayer({
       id: 'site-line',
       type: 'line',
       source: 'mp',
+      'source-layer': SL,
       filter: fc('site_boundary'),
       paint: {
         'line-color': '#ffffff', 'line-width': 3,
@@ -253,6 +263,7 @@ function setupLayers() {
       id: 'slope25-fill',
       type: 'fill',
       source: 'mp',
+      'source-layer': SL,
       filter: fc('raw_slope_gt25_dem'),
       paint: {
         'fill-color': '#c33', 'fill-opacity': 0.35,
@@ -266,6 +277,7 @@ function setupLayers() {
       id: 'lots-normal-fill',
       type: 'fill-extrusion',
       source: 'mp',
+      'source-layer': SL,
       filter: ['all', f('lot'),
                ['<=', ['to-number', ['get', 'raw_slope_deg']], 25]],
       paint: {
@@ -279,6 +291,7 @@ function setupLayers() {
       id: 'lots-fill-fill',
       type: 'fill-extrusion',
       source: 'mp',
+      'source-layer': SL,
       filter: ['all', f('lot'),
                ['>', ['to-number', ['get', 'raw_slope_deg']], 25]],
       paint: {
@@ -292,6 +305,7 @@ function setupLayers() {
       id: 'lots-line',
       type: 'line',
       source: 'mp',
+      'source-layer': SL,
       filter: f('lot'),
       paint: {
         'line-color': '#5a3a14', 'line-width': 0.8, 'line-opacity': 0.7,
@@ -301,6 +315,7 @@ function setupLayers() {
       id: 'lots-labels',
       type: 'symbol',
       source: 'mp',
+      'source-layer': SL,
       filter: f('lot'),
       layout: {
         'text-field': ['get', 'id'],
@@ -318,6 +333,7 @@ function setupLayers() {
       id: 'public-fill',
       type: 'fill-extrusion',
       source: 'mp',
+      'source-layer': SL,
       filter: fc('public_platform'),
       paint: {
         'fill-extrusion-color': [
@@ -337,6 +353,7 @@ function setupLayers() {
       id: 'public-labels',
       type: 'symbol',
       source: 'mp',
+      'source-layer': SL,
       filter: fc('public_platform'),
       layout: {
         'text-field': ['get', 'function_id'],
@@ -354,6 +371,7 @@ function setupLayers() {
       id: 'wellness-fill',
       type: 'fill-extrusion',
       source: 'mp',
+      'source-layer': SL,
       filter: f('wellness_pavilion'),
       paint: {
         'fill-extrusion-color': '#5b8a9a',
@@ -365,6 +383,7 @@ function setupLayers() {
       id: 'bathing-tubs',
       type: 'circle',
       source: 'mp',
+      'source-layer': SL,
       filter: f('bathing_tub'),
       paint: {
         'circle-radius': 5,
@@ -379,6 +398,7 @@ function setupLayers() {
       id: 'corridors-fill',
       type: 'fill',
       source: 'mp',
+      'source-layer': SL,
       filter: fc('road_corridor_6m_concept'),
       paint: { 'fill-color': '#a07050', 'fill-opacity': 0.55 },
       layout: { visibility: 'none' },
@@ -389,6 +409,7 @@ function setupLayers() {
       id: 'roads-line',
       type: 'line',
       source: 'mp',
+      'source-layer': SL,
       filter: fc('road_centerline'),
       paint: {
         'line-color': '#5fff5f', 'line-width': 3, 'line-opacity': 0.92,
@@ -401,6 +422,7 @@ function setupLayers() {
       id: 'turnarounds',
       type: 'circle',
       source: 'mp',
+      'source-layer': SL,
       filter: fc('turnaround_point'),
       paint: {
         'circle-radius': {
@@ -426,6 +448,7 @@ function setupLayers() {
       id: 'water-points',
       type: 'circle',
       source: 'mp',
+      'source-layer': SL,
       filter: ['any',
                f('water_intake'), f('borehole'), f('water_accumulator')],
       paint: {
@@ -445,6 +468,7 @@ function setupLayers() {
       id: 'water-labels',
       type: 'symbol',
       source: 'mp',
+      'source-layer': SL,
       filter: ['any',
                f('water_intake'), f('borehole'), f('water_accumulator')],
       layout: {
@@ -469,6 +493,7 @@ function setupLayers() {
       id: 'drainage-line',
       type: 'line',
       source: 'mp',
+      'source-layer': SL,
       filter: ['any', fc('drainage_line'), fc('creek_receiver_concept')],
       paint: {
         'line-color': [
@@ -493,6 +518,7 @@ function setupLayers() {
       id: 'outfall',
       type: 'circle',
       source: 'mp',
+      'source-layer': SL,
       filter: fc('outfall_point'),
       paint: {
         'circle-radius': 8,
@@ -507,6 +533,7 @@ function setupLayers() {
       id: 'fishing-ponds',
       type: 'circle',
       source: 'mp',
+      'source-layer': SL,
       filter: f('fishing_pond'),
       paint: {
         'circle-radius': 12,
@@ -520,6 +547,7 @@ function setupLayers() {
       id: 'fishing-labels',
       type: 'symbol',
       source: 'mp',
+      'source-layer': SL,
       filter: f('fishing_pond'),
       layout: {
         'text-field': ['concat', 'Рыбалка ', ['get', 'size_m'], ' м'],
@@ -537,6 +565,7 @@ function setupLayers() {
       id: 'electrical-points',
       type: 'circle',
       source: 'mp',
+      'source-layer': SL,
       filter: ['any', f('hv_input'), f('ktp')],
       paint: {
         'circle-radius': 7,
@@ -549,6 +578,7 @@ function setupLayers() {
       id: 'electrical-labels',
       type: 'symbol',
       source: 'mp',
+      'source-layer': SL,
       filter: ['any', f('hv_input'), f('ktp')],
       layout: {
         'text-field': ['get', 'name'],
@@ -566,6 +596,7 @@ function setupLayers() {
       id: 'lighting-points',
       type: 'circle',
       source: 'mp',
+      'source-layer': SL,
       filter: f('lighting_column'),
       paint: {
         'circle-radius': 3,
