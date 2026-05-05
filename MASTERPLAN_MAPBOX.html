@@ -76,7 +76,7 @@
   <label><input type="checkbox" data-layer="site" checked>
     <span class="swatch" style="background:transparent;border:2px solid #fff"></span>Контур участка</label>
   <label><input type="checkbox" data-layer="lots" checked>
-    <span class="swatch" style="background:#e8ce98"></span>Дома 48 шт (3 м)</label>
+    <span class="swatch" style="background:#e8ce98"></span>Лоты 50 шт</label>
   <label><input type="checkbox" data-layer="lots-labels" checked>
     <span class="swatch" style="background:transparent;border:1px solid #fff;color:#fff;font-size:8px;line-height:11px;text-align:center">L</span>Номера лотов</label>
   <label><input type="checkbox" data-layer="public" checked>
@@ -130,10 +130,10 @@ let map = new mapboxgl.Map({
   center: SITE_CENTER, zoom: 16.5, pitch: 60, bearing: 25,
   antialias: true, attributionControl: false,
 });
-map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}), 'bottom-right');
-map.addControl(new mapboxgl.FullscreenControl(), 'bottom-right');
-map.addControl(new mapboxgl.ScaleControl({unit:'metric'}), 'bottom-left');
-map.addControl(new mapboxgl.AttributionControl({compact:true}), 'bottom-left');
+map.addControl(new mapboxgl.NavigationControl({visualizePitch:true, showCompass:true}), 'bottom-left');
+map.addControl(new mapboxgl.FullscreenControl(), 'bottom-left');
+map.addControl(new mapboxgl.ScaleControl({unit:'metric'}), 'bottom-right');
+map.addControl(new mapboxgl.AttributionControl({compact:true}), 'bottom-right');
 
 function setupLayers() {
   // 3D рельеф
@@ -199,15 +199,14 @@ function setupLayers() {
   map.addLayer({id:'slope-buffer-fill', type:'fill', source:'mp', filter:fc('common_retaining_slope'),
     paint:{'fill-color':'#c4936b','fill-opacity':0.4}, layout:{visibility:'none'}});
 
-  // Лоты — после земляных работ всё ровно, дома стоят на готовых платформах (3 м крыша)
-  map.addLayer({id:'lots-fill', type:'fill-extrusion', source:'mp', filter:fc('residential_lot'),
+  // Лоты — плоские участки земли (после землеустройства), цвет по террасе
+  map.addLayer({id:'lots-fill', type:'fill', source:'mp', filter:fc('residential_lot'),
     paint:{
-      'fill-extrusion-color':['match',['get','terrace'],
+      'fill-color':['match',['get','terrace'],
          'T225','#f0deb8', 'T240','#ecd6a8', 'T255','#e8ce98',
          'T270','#e4c688', 'T280','#e0be78', '#fde6c7'],
-      'fill-extrusion-height':3.0,
-      'fill-extrusion-base':0.0,
-      'fill-extrusion-opacity':0.92}});
+      'fill-opacity':0.85,
+      'fill-outline-color':'#5a3a14'}});
   map.addLayer({id:'lots-line', type:'line', source:'mp', filter:fc('residential_lot'),
     paint:{'line-color':'#5a3a14','line-width':0.7,'line-opacity':0.7}});
   map.addLayer({id:'lots-labels', type:'symbol', source:'mp', filter:fc('residential_lot'),

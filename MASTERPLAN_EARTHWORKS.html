@@ -12,6 +12,10 @@
   .topnav a { color:#9bb1c4; text-decoration:none; padding:6px 12px; border-radius:5px; font-size:12px; transition:all .15s;}
   .topnav a:hover { background:#234; color:#cdf;}
   .topnav a.active { background:#3060c0; color:#fff;}
+  .stage-toggle { display:flex; gap:0; margin-bottom:10px; border-radius:6px; overflow:hidden; border:1px solid #345;}
+  .stage-toggle button { flex:1; background:#1a2530; border:0; color:#9bb1c4; padding:8px 10px; cursor:pointer; font-size:12px; font-weight:500; transition:all .15s;}
+  .stage-toggle button.active { background:#3060c0; color:#fff;}
+  .stage-toggle button:hover:not(.active) { background:#234; color:#cdf;}
   .hud { position:absolute; top:60px; left:14px; z-index:4; background:rgba(15,22,28,.92); padding:14px 16px; border-radius:8px; max-width:340px; font-size:12px; line-height:1.5; backdrop-filter:blur(6px); box-shadow:0 4px 14px rgba(0,0,0,.55);}
   .hud h2 { margin:0 0 4px; font-size:15px; font-weight:600;}
   .hud .sub { color:#9bb1c4; font-size:11px; margin-bottom:8px;}
@@ -45,10 +49,15 @@
 </div>
 
 <div class="hud">
-  <h2>Землеустройство — этап 0</h2>
-  <div class="sub">Состояние «после земляных работ»</div>
+  <h2>Землеустройство</h2>
+  <div class="sub">Сравнение «до» и «после» земляных работ</div>
 
-  <div class="group-title">Террасы (5 шт)</div>
+  <div class="stage-toggle">
+    <button id="stage-before" onclick="setStage('before')">До работ</button>
+    <button id="stage-after" class="active" onclick="setStage('after')">После работ</button>
+  </div>
+
+  <div class="group-title">Террасы (5 шт, после)</div>
   <div class="stat"><span>T225 / 227 м БС:</span><span>15 лотов · 8490 м²</span></div>
   <div class="stat"><span>T240 / 243 м БС:</span><span>3 лота · 1984 м²</span></div>
   <div class="stat"><span>T255 / 258 м БС:</span><span>19 лотов · 7756 м²</span></div>
@@ -74,12 +83,22 @@
     <button onclick="flyToBird()">Сверху</button>
     <button onclick="flyToOrbit()">Облёт 3D</button>
     <button onclick="flyToT225()">T225 (низ)</button>
-    <button onclick="resetView()">Сброс</button>
+    <button onclick="resetView()">К посёлку</button>
   </div>
 </div>
 
 <div class="layers">
-  <h3>Слои земляных работ</h3>
+  <h3>До работ (исходный рельеф)</h3>
+  <label><input type="checkbox" data-layer="before_slope25">
+    <span class="swatch" style="background:#c33;opacity:.55"></span>Склон >25° (нельзя)</label>
+  <label><input type="checkbox" data-layer="before_nobuild">
+    <span class="swatch" style="background:#3070b8;opacity:.55"></span>No-build (talweg)</label>
+  <label><input type="checkbox" data-layer="before_retslope">
+    <span class="swatch" style="background:#c4936b;opacity:.55"></span>Откосы под подпор</label>
+  <label><input type="checkbox" data-layer="before_greenbuf">
+    <span class="swatch" style="background:#94c47d;opacity:.4"></span>Зелёный буфер</label>
+
+  <h3 style="margin-top:14px">Слои земляных работ</h3>
   <label><input type="checkbox" data-layer="terrace_T225" checked>
     <span class="swatch" style="background:#d8e6a0"></span>T225 (z=227.1)</label>
   <label><input type="checkbox" data-layer="terrace_T240" checked>
@@ -133,10 +152,10 @@ let map = new mapboxgl.Map({
   center: SITE_CENTER, zoom: 16.8, pitch: 50, bearing: 15,
   antialias: true, attributionControl: false,
 });
-map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}), 'bottom-right');
-map.addControl(new mapboxgl.FullscreenControl(), 'bottom-right');
-map.addControl(new mapboxgl.ScaleControl({unit:'metric'}), 'bottom-left');
-map.addControl(new mapboxgl.AttributionControl({compact:true}), 'bottom-left');
+map.addControl(new mapboxgl.NavigationControl({visualizePitch:true, showCompass:true}), 'bottom-left');
+map.addControl(new mapboxgl.FullscreenControl(), 'bottom-left');
+map.addControl(new mapboxgl.ScaleControl({unit:'metric'}), 'bottom-right');
+map.addControl(new mapboxgl.AttributionControl({compact:true}), 'bottom-right');
 
 const TERRACE_COLOR = {
   'T225':'#d8e6a0', 'T240':'#b8d090', 'T255':'#94b878', 'T270':'#759c60', 'T280':'#56804c'
@@ -191,6 +210,23 @@ function setupLayers() {
   map.addLayer({id:'drain-terrace', type:'line', source:'ew', filter:fc('drainage_terrace'),
     paint:{'line-color':'#5a9ad0','line-width':1.4,'line-dasharray':[3,2],'line-opacity':0.7}});
 
+  // 4b. "ДО РАБОТ" слои — исходный рельеф, видны только в режиме "before"
+  map.addLayer({id:'before-slope25', type:'fill', source:'mp', filter:fc('raw_slope_gt25_dem'),
+    paint:{'fill-color':'#c33','fill-opacity':0.55,'fill-outline-color':'#7a0000'},
+    layout:{visibility:'none'}});
+  map.addLayer({id:'before-slope25-pattern', type:'line', source:'mp', filter:fc('raw_slope_gt25_dem'),
+    paint:{'line-color':'#7a0000','line-width':1.2,'line-dasharray':[2,3]},
+    layout:{visibility:'none'}});
+  map.addLayer({id:'before-nobuild', type:'fill', source:'mp', filter:fc('drainage_no_build_corridor'),
+    paint:{'fill-color':'#3070b8','fill-opacity':0.55,'fill-outline-color':'#0a3060'},
+    layout:{visibility:'none'}});
+  map.addLayer({id:'before-greenbuf', type:'fill', source:'mp', filter:fc('common_green_buffer'),
+    paint:{'fill-color':'#94c47d','fill-opacity':0.4},
+    layout:{visibility:'none'}});
+  map.addLayer({id:'before-retslope', type:'fill', source:'mp', filter:fc('common_retaining_slope'),
+    paint:{'fill-color':'#c4936b','fill-opacity':0.55},
+    layout:{visibility:'none'}});
+
   // 5. Контекст: лоты, общественные, дороги, муниципальная
   map.addLayer({id:'lots-out', type:'line', source:'mp', filter:fc('residential_lot'),
     paint:{'line-color':'#fde6c7','line-width':1.0,'line-opacity':0.7}});
@@ -221,8 +257,40 @@ function setupLayers() {
   });
 
   toggleGroup('municipal', false);
+  setStage('after');  // start in "after" mode
 
   setTimeout(()=>map.flyTo({center:SITE_CENTER, zoom:17.0, pitch:50, bearing:15, duration:2500, essential:true}), 600);
+}
+
+const AFTER_LAYERS = ['terr-T225','terr-T240','terr-T255','terr-T270','terr-T280',
+  'terr-T225-label','terr-T240-label','terr-T255-label','terr-T270-label','terr-T280-label',
+  'wall-gabion','wall-rc','drain-main','drain-terrace'];
+const BEFORE_LAYERS = ['before-slope25','before-slope25-pattern','before-nobuild','before-greenbuf','before-retslope'];
+
+function setStage(stage) {
+  const after = stage === 'after';
+  AFTER_LAYERS.forEach(id => { if (map.getLayer(id)) map.setLayoutProperty(id,'visibility', after?'visible':'none'); });
+  BEFORE_LAYERS.forEach(id => { if (map.getLayer(id)) map.setLayoutProperty(id,'visibility', after?'none':'visible'); });
+
+  // обновить чекбоксы и кнопки
+  document.querySelectorAll('input[data-layer]').forEach(inp => {
+    const k = inp.dataset.layer;
+    if (['terrace_T225','terrace_T240','terrace_T255','terrace_T270','terrace_T280',
+         'walls_gabion','walls_rc','drain_main','drain_terrace'].includes(k)) {
+      inp.checked = after;
+    }
+    if (['before_slope25','before_nobuild','before_retslope','before_greenbuf'].includes(k)) {
+      inp.checked = !after;
+    }
+  });
+  document.getElementById('stage-before').classList.toggle('active', !after);
+  document.getElementById('stage-after').classList.toggle('active', after);
+
+  // обновить заголовок HUD
+  const subEl = document.querySelector('.hud .sub');
+  if (subEl) subEl.textContent = after
+    ? 'Состояние ПОСЛЕ земляных работ — 5 готовых террас, стены, дренаж'
+    : 'Состояние ДО работ — склон >25°, талвег запретен, без террас';
 }
 
 function renderPopup(p) {
@@ -257,6 +325,10 @@ function toggleGroup(g, vis) {
     'terrace_T280':['terr-T280','terr-T280-label'],
     'walls_gabion':['wall-gabion'], 'walls_rc':['wall-rc'],
     'drain_main':['drain-main'], 'drain_terrace':['drain-terrace'],
+    'before_slope25':['before-slope25','before-slope25-pattern'],
+    'before_nobuild':['before-nobuild'],
+    'before_retslope':['before-retslope'],
+    'before_greenbuf':['before-greenbuf'],
     'lots':['lots-out'], 'public':['public-fill','public-labels'],
     'roads':['roads-vn','roads-gal'], 'municipal':['mun-line'],
     'site':['site-line']
