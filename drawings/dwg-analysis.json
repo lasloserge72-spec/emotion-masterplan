@@ -1,0 +1,2442 @@
+{
+  "source_dwg": "3200Sqf2storyVillaWithRoofgarden (1).dwg",
+  "converted_dxf": "3200Sqf2storyVillaWithRoofgarden_converted.dxf",
+  "dxf_version": "AC1027",
+  "insunits_header": 4,
+  "note": "Dimension labels in drawing are in centimeters despite header value; 1400 equals 14.00 m on plans.",
+  "modelspace_extents": {
+    "min": [
+      178915.98,
+      11962.966
+    ],
+    "max": [
+      201915.98,
+      20992.966
+    ],
+    "size": [
+      23000.0,
+      9030.0
+    ]
+  },
+  "entity_counts": {
+    "MTEXT": 2,
+    "LWPOLYLINE": 701,
+    "LINE": 978,
+    "INSERT": 267,
+    "CIRCLE": 13,
+    "TEXT": 227,
+    "HATCH": 80,
+    "LEADER": 15,
+    "DIMENSION": 118
+  },
+  "layers": [
+    "0",
+    "0-ceiling opening",
+    "0-DARPUSH",
+    "0-fazelab",
+    "0-grass",
+    "0-handrail",
+    "0-hatch",
+    "0-KAFSAZI",
+    "0-NIVO",
+    "0-WIN",
+    "1",
+    "2",
+    "3",
+    "4",
+    "7",
+    "8",
+    "9",
+    "area",
+    "AX",
+    "bou",
+    "CAR",
+    "Defpoints",
+    "DIM",
+    "DOOR",
+    "FURN",
+    "furniture faz2",
+    "HA",
+    "K",
+    "SH",
+    "text",
+    "TOOLS",
+    "TREE"
+  ],
+  "layer_counts": {
+    "0": 38,
+    "bou": 6,
+    "7": 480,
+    "furniture faz2": 310,
+    "2": 432,
+    "8": 70,
+    "text": 98,
+    "1": 191,
+    "0-ceiling opening": 6,
+    "3": 138,
+    "4": 91,
+    "K": 56,
+    "0-handrail": 37,
+    "0-KAFSAZI": 36,
+    "0-fazelab": 2,
+    "TREE": 8,
+    "0-grass": 1,
+    "0-NIVO": 60,
+    "0-hatch": 39,
+    "0-DARPUSH": 27,
+    "0-WIN": 14,
+    "HA": 21,
+    "FURN": 2,
+    "CAR": 1,
+    "DIM": 99,
+    "9": 6,
+    "area": 3,
+    "SH": 129
+  },
+  "texts": [
+    {
+      "layer": "text",
+      "text": "Dining",
+      "x": 180569.45,
+      "y": 16991.42
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "D.W.",
+      "x": 180808.67,
+      "y": 17700.8
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "R",
+      "x": 180826.54,
+      "y": 17437.38
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "M/O",
+      "x": 180808.4,
+      "y": 17115.72
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Super",
+      "x": 180804.9,
+      "y": 17053.88
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "F",
+      "x": 180826.54,
+      "y": 17497.38
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 184192.37,
+      "y": 17679.75
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 184505.26,
+      "y": 17492.58
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 184342.37,
+      "y": 17002.25
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "U.F.H. Collector",
+      "x": 184228.13,
+      "y": 17698.63
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "U.F.H.Collector",
+      "x": 180409.6,
+      "y": 17746.26
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "PKG",
+      "x": 180808.67,
+      "y": 17723.22
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "R",
+      "x": 183825.92,
+      "y": 16735.44
+    },
+    {
+      "layer": "text",
+      "text": "Sitting area",
+      "x": 188100.82,
+      "y": 17230.32
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Fireplace",
+      "x": 188121.42,
+      "y": 17398.34
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Bar",
+      "x": 188038.02,
+      "y": 17036.33
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Barbecues",
+      "x": 188677.27,
+      "y": 16987.36
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "White sand",
+      "x": 188115.13,
+      "y": 17171.38
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "White sand",
+      "x": 188401.62,
+      "y": 17300.39
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 180172.37,
+      "y": 17782.25
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 180595.26,
+      "y": 17512.58
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 184025.26,
+      "y": 17512.58
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 179841.37,
+      "y": 16852.25
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Fireplace",
+      "x": 179876.21,
+      "y": 16853.62
+    },
+    {
+      "layer": "text",
+      "text": "Foyer",
+      "x": 180498.63,
+      "y": 17734.36
+    },
+    {
+      "layer": "text",
+      "text": "Guest room",
+      "x": 180157.89,
+      "y": 17660.15
+    },
+    {
+      "layer": "text",
+      "text": "2nd. Kit.",
+      "x": 180718.71,
+      "y": 17576.67
+    },
+    {
+      "layer": "text",
+      "text": "Kitchen",
+      "x": 180589.98,
+      "y": 17437.4
+    },
+    {
+      "layer": "text",
+      "text": "TV room",
+      "x": 180104.54,
+      "y": 17272.39
+    },
+    {
+      "layer": "text",
+      "text": "Living room",
+      "x": 180040.31,
+      "y": 16834.03
+    },
+    {
+      "layer": "text",
+      "text": "Terrace outdoor sitting",
+      "x": 180491.72,
+      "y": 16444.35
+    },
+    {
+      "layer": "text",
+      "text": "Balcony",
+      "x": 180598.56,
+      "y": 16658.98
+    },
+    {
+      "layer": "text",
+      "text": "Entry",
+      "x": 180485.58,
+      "y": 17940.0
+    },
+    {
+      "layer": "text",
+      "text": "Green area",
+      "x": 180056.91,
+      "y": 18052.23
+    },
+    {
+      "layer": "text",
+      "text": "Green area",
+      "x": 180581.4,
+      "y": 15975.19
+    },
+    {
+      "layer": "text",
+      "text": "Carport",
+      "x": 180975.7,
+      "y": 17627.12
+    },
+    {
+      "layer": "text",
+      "text": "Open to below",
+      "x": 183987.68,
+      "y": 17300.78
+    },
+    {
+      "layer": "text",
+      "text": "Night hall",
+      "x": 184032.78,
+      "y": 16745.8
+    },
+    {
+      "layer": "text",
+      "text": "Balcony",
+      "x": 184580.41,
+      "y": 16680.99
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Bar",
+      "x": 183817.88,
+      "y": 16879.72
+    },
+    {
+      "layer": "text",
+      "text": "Master bedroom",
+      "x": 184453.36,
+      "y": 17125.74
+    },
+    {
+      "layer": "text",
+      "text": "Bedroom(3)",
+      "x": 184025.35,
+      "y": 17687.98
+    },
+    {
+      "layer": "text",
+      "text": "W.I.C.",
+      "x": 184671.53,
+      "y": 17539.2
+    },
+    {
+      "layer": "text",
+      "text": "W.I.C.",
+      "x": 184250.76,
+      "y": 17807.5
+    },
+    {
+      "layer": "text",
+      "text": "Roof garden",
+      "x": 188354.55,
+      "y": 17063.01
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "%%P0.00",
+      "x": 180679.92,
+      "y": 18252.27
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.10",
+      "x": 180985.39,
+      "y": 17137.76
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.60",
+      "x": 180975.33,
+      "y": 16706.14
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.60",
+      "x": 180448.95,
+      "y": 18030.33
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.60",
+      "x": 180118.61,
+      "y": 17005.95
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.60",
+      "x": 180414.12,
+      "y": 17459.53
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "%%P0.00",
+      "x": 180136.22,
+      "y": 16114.84
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+4.60",
+      "x": 184030.82,
+      "y": 17101.39
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+4.60",
+      "x": 184593.9,
+      "y": 16925.21
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+8.50",
+      "x": 188740.19,
+      "y": 17575.9
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+8.50",
+      "x": 188129.62,
+      "y": 17554.86
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+8.50",
+      "x": 188394.01,
+      "y": 16992.8
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+8.40",
+      "x": 188779.33,
+      "y": 16954.19
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+9.60",
+      "x": 188175.19,
+      "y": 16657.71
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+9.60",
+      "x": 188537.02,
+      "y": 17949.67
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Condenser (1)",
+      "x": 187823.9,
+      "y": 17803.86
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Condenser (2)",
+      "x": 187923.9,
+      "y": 17803.86
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Condenser (3)",
+      "x": 188023.9,
+      "y": 17803.86
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Condenser (4)",
+      "x": 188123.9,
+      "y": 17803.86
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Condenser (5)",
+      "x": 188223.9,
+      "y": 17803.86
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Condenser (6)",
+      "x": 188323.9,
+      "y": 17803.86
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Condenser (7)",
+      "x": 188423.9,
+      "y": 17803.86
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Barbecues",
+      "x": 181142.52,
+      "y": 16873.54
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 192476.73,
+      "y": 13239.58
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 196670.26,
+      "y": 13619.58
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 196760.26,
+      "y": 13239.58
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Split unit",
+      "x": 196200.26,
+      "y": 13619.58
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "W.",
+      "x": 180659.16,
+      "y": 17562.51
+    },
+    {
+      "layer": "text",
+      "text": "Dining",
+      "x": 192569.45,
+      "y": 16991.42
+    },
+    {
+      "layer": "text",
+      "text": "Sitting area",
+      "x": 200100.82,
+      "y": 17230.32
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Fireplace",
+      "x": 200121.42,
+      "y": 17398.34
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Bar",
+      "x": 200038.02,
+      "y": 17036.33
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Barbecues",
+      "x": 200677.27,
+      "y": 16987.36
+    },
+    {
+      "layer": "text",
+      "text": "Foyer",
+      "x": 192498.63,
+      "y": 17734.36
+    },
+    {
+      "layer": "text",
+      "text": "Guest room",
+      "x": 192157.89,
+      "y": 17660.15
+    },
+    {
+      "layer": "text",
+      "text": "2nd. Kit.",
+      "x": 192718.71,
+      "y": 17576.67
+    },
+    {
+      "layer": "text",
+      "text": "Kitchen",
+      "x": 192589.98,
+      "y": 17437.4
+    },
+    {
+      "layer": "text",
+      "text": "TV room",
+      "x": 192104.54,
+      "y": 17272.39
+    },
+    {
+      "layer": "text",
+      "text": "Living room",
+      "x": 192040.31,
+      "y": 16834.03
+    },
+    {
+      "layer": "text",
+      "text": "Terrace outdoor sitting",
+      "x": 192491.72,
+      "y": 16427.25
+    },
+    {
+      "layer": "text",
+      "text": "Balcony",
+      "x": 192598.56,
+      "y": 16658.98
+    },
+    {
+      "layer": "text",
+      "text": "Entry",
+      "x": 192485.58,
+      "y": 17940.0
+    },
+    {
+      "layer": "text",
+      "text": "Green area",
+      "x": 192056.91,
+      "y": 18052.23
+    },
+    {
+      "layer": "text",
+      "text": "Green area",
+      "x": 192581.4,
+      "y": 15975.19
+    },
+    {
+      "layer": "text",
+      "text": "Carport",
+      "x": 192975.7,
+      "y": 17627.12
+    },
+    {
+      "layer": "text",
+      "text": "Open to below",
+      "x": 195987.68,
+      "y": 17300.78
+    },
+    {
+      "layer": "text",
+      "text": "Night hall",
+      "x": 196032.78,
+      "y": 16745.8
+    },
+    {
+      "layer": "text",
+      "text": "Balcony",
+      "x": 196580.41,
+      "y": 16680.99
+    },
+    {
+      "layer": "text",
+      "text": "Master bedroom",
+      "x": 196453.36,
+      "y": 17125.74
+    },
+    {
+      "layer": "text",
+      "text": "Bedroom(3)",
+      "x": 196025.35,
+      "y": 17687.98
+    },
+    {
+      "layer": "text",
+      "text": "W.I.C.",
+      "x": 196671.53,
+      "y": 17539.2
+    },
+    {
+      "layer": "text",
+      "text": "W.I.C.",
+      "x": 196250.76,
+      "y": 17807.5
+    },
+    {
+      "layer": "text",
+      "text": "Roof garden",
+      "x": 200354.55,
+      "y": 17048.93
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "%%P0.00",
+      "x": 192679.92,
+      "y": 18252.27
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.10",
+      "x": 192985.39,
+      "y": 17137.76
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.60",
+      "x": 192975.33,
+      "y": 16706.14
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.60",
+      "x": 192448.95,
+      "y": 18030.33
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.60",
+      "x": 192118.61,
+      "y": 17005.95
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+0.60",
+      "x": 192414.12,
+      "y": 17459.53
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "%%P0.00",
+      "x": 192136.22,
+      "y": 16114.84
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+4.60",
+      "x": 196030.82,
+      "y": 17101.39
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+4.60",
+      "x": 196593.9,
+      "y": 16925.21
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+8.50",
+      "x": 200755.7,
+      "y": 17643.25
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+8.50",
+      "x": 200129.62,
+      "y": 17554.86
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+8.50",
+      "x": 200394.01,
+      "y": 16992.8
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+8.40",
+      "x": 200779.33,
+      "y": 16954.19
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+9.60",
+      "x": 200175.19,
+      "y": 16657.71
+    },
+    {
+      "layer": "0-NIVO",
+      "text": "+9.60",
+      "x": 200537.02,
+      "y": 17949.67
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Barbecues",
+      "x": 193142.52,
+      "y": 16873.54
+    },
+    {
+      "layer": "text",
+      "text": "Net area = 108.50 sqm",
+      "x": 188324.36,
+      "y": 17033.69
+    },
+    {
+      "layer": "text",
+      "text": "Net terrace area more than balcony = 38.50 sqm",
+      "x": 180210.51,
+      "y": 16416.21
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "R",
+      "x": 195825.92,
+      "y": 16735.44
+    },
+    {
+      "layer": "furniture faz2",
+      "text": "Bar",
+      "x": 195817.88,
+      "y": 16879.72
+    },
+    {
+      "layer": "text",
+      "text": "Planter",
+      "x": 196077.89,
+      "y": 16632.53
+    },
+    {
+      "layer": "2",
+      "text": "+0.60",
+      "x": 181750.36,
+      "y": 15721.83
+    },
+    {
+      "layer": "text",
+      "text": "Ground floor plan",
+      "x": 181033.7,
+      "y": 15768.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 181221.61,
+      "y": 15714.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 181352.19,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 181405.02,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 181463.95,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 181541.05,
+      "y": 15727.27
+    },
+    {
+      "layer": "text",
+      "text": "Page (1)",
+      "x": 181440.0,
+      "y": 15535.0
+    },
+    {
+      "layer": "text",
+      "text": "Furniture of",
+      "x": 181103.27,
+      "y": 15841.41
+    },
+    {
+      "layer": "text",
+      "text": "This floor area = 154.30 sqm",
+      "x": 180987.42,
+      "y": 16030.87
+    },
+    {
+      "layer": "text",
+      "text": "All building area = 303.42 sqm",
+      "x": 180948.13,
+      "y": 15985.39
+    },
+    {
+      "layer": "2",
+      "text": "+4.60",
+      "x": 185750.36,
+      "y": 15721.83
+    },
+    {
+      "layer": "text",
+      "text": "1st floor plan",
+      "x": 185037.96,
+      "y": 15768.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 185221.61,
+      "y": 15714.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 185352.19,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 185405.02,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 185463.95,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 185541.05,
+      "y": 15727.27
+    },
+    {
+      "layer": "text",
+      "text": "Page (2)",
+      "x": 185440.0,
+      "y": 15535.0
+    },
+    {
+      "layer": "text",
+      "text": "Furniture of",
+      "x": 185103.27,
+      "y": 15841.41
+    },
+    {
+      "layer": "text",
+      "text": "This floor area = 149.12 sqm",
+      "x": 184987.42,
+      "y": 16030.87
+    },
+    {
+      "layer": "text",
+      "text": "All building area = 303.42 sqm",
+      "x": 184948.13,
+      "y": 15985.39
+    },
+    {
+      "layer": "2",
+      "text": "+8.50",
+      "x": 189750.36,
+      "y": 15721.83
+    },
+    {
+      "layer": "text",
+      "text": "Roof garden plan",
+      "x": 189012.95,
+      "y": 15768.78
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 189463.95,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 189541.05,
+      "y": 15727.27
+    },
+    {
+      "layer": "text",
+      "text": "Page (3)",
+      "x": 189440.0,
+      "y": 15535.0
+    },
+    {
+      "layer": "text",
+      "text": "Furniture of",
+      "x": 189103.27,
+      "y": 15841.41
+    },
+    {
+      "layer": "2",
+      "text": "+0.60",
+      "x": 193750.36,
+      "y": 15721.83
+    },
+    {
+      "layer": "text",
+      "text": "Ground floor plan",
+      "x": 193033.7,
+      "y": 15768.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 193221.61,
+      "y": 15714.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 193352.19,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 193405.02,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 193463.95,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 193541.05,
+      "y": 15727.27
+    },
+    {
+      "layer": "text",
+      "text": "Page (4)",
+      "x": 193440.0,
+      "y": 15535.0
+    },
+    {
+      "layer": "text",
+      "text": "Dimension of",
+      "x": 193088.2,
+      "y": 15841.41
+    },
+    {
+      "layer": "text",
+      "text": "This floor area = 154.30 sqm",
+      "x": 192987.42,
+      "y": 16030.87
+    },
+    {
+      "layer": "text",
+      "text": "All building area = 303.42 sqm",
+      "x": 192948.13,
+      "y": 15985.39
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 189221.61,
+      "y": 15714.9
+    },
+    {
+      "layer": "2",
+      "text": "+4.60",
+      "x": 197750.36,
+      "y": 15721.83
+    },
+    {
+      "layer": "text",
+      "text": "1st floor plan",
+      "x": 197037.96,
+      "y": 15768.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 197221.61,
+      "y": 15714.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 197352.19,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 197405.02,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 197463.95,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 197541.05,
+      "y": 15727.27
+    },
+    {
+      "layer": "text",
+      "text": "Page (5)",
+      "x": 197440.0,
+      "y": 15535.0
+    },
+    {
+      "layer": "text",
+      "text": "This floor area = 149.12 sqm",
+      "x": 196987.42,
+      "y": 16030.87
+    },
+    {
+      "layer": "text",
+      "text": "All building area = 303.42 sqm",
+      "x": 196948.13,
+      "y": 15985.39
+    },
+    {
+      "layer": "2",
+      "text": "+8.50",
+      "x": 201750.36,
+      "y": 15721.83
+    },
+    {
+      "layer": "text",
+      "text": "Roof garden plan",
+      "x": 201012.95,
+      "y": 15768.78
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 201463.95,
+      "y": 15727.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 201541.05,
+      "y": 15727.27
+    },
+    {
+      "layer": "text",
+      "text": "Page (6)",
+      "x": 201440.0,
+      "y": 15535.0
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 201221.61,
+      "y": 15714.9
+    },
+    {
+      "layer": "text",
+      "text": "Dimension of",
+      "x": 197088.2,
+      "y": 15841.41
+    },
+    {
+      "layer": "text",
+      "text": "Dimension of",
+      "x": 201088.2,
+      "y": 15841.41
+    },
+    {
+      "layer": "text",
+      "text": "North elevation",
+      "x": 181154.67,
+      "y": 12268.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 181498.29,
+      "y": 12214.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 181628.87,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 181681.7,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 181740.62,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 181817.72,
+      "y": 12227.27
+    },
+    {
+      "layer": "text",
+      "text": "Page (7)",
+      "x": 181440.0,
+      "y": 12035.0
+    },
+    {
+      "layer": "text",
+      "text": "Page (8)",
+      "x": 185440.0,
+      "y": 12035.0
+    },
+    {
+      "layer": "text",
+      "text": "Page (9)",
+      "x": 189440.0,
+      "y": 12035.0
+    },
+    {
+      "layer": "text",
+      "text": "Page (10)",
+      "x": 193380.47,
+      "y": 12035.0
+    },
+    {
+      "layer": "text",
+      "text": "Page (11)",
+      "x": 197380.47,
+      "y": 12035.0
+    },
+    {
+      "layer": "text",
+      "text": "South elevation",
+      "x": 185142.77,
+      "y": 12268.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 185498.29,
+      "y": 12214.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 185628.87,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 185681.7,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 185740.62,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 185817.72,
+      "y": 12227.27
+    },
+    {
+      "layer": "text",
+      "text": "East elevation",
+      "x": 189208.24,
+      "y": 12268.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 189498.29,
+      "y": 12214.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 189628.87,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 189681.7,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 189740.62,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 189817.72,
+      "y": 12227.27
+    },
+    {
+      "layer": "text",
+      "text": "Section A - A",
+      "x": 193157.65,
+      "y": 12268.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 193498.29,
+      "y": 12214.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 193628.87,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 193681.7,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 193740.62,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 193817.72,
+      "y": 12227.27
+    },
+    {
+      "layer": "text",
+      "text": "Section B - B",
+      "x": 197145.74,
+      "y": 12268.78
+    },
+    {
+      "layer": "SH",
+      "text": "S C A LE  :",
+      "x": 197498.29,
+      "y": 12214.9
+    },
+    {
+      "layer": "SH",
+      "text": "0",
+      "x": 197628.87,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "50",
+      "x": 197681.7,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "100",
+      "x": 197740.62,
+      "y": 12227.27
+    },
+    {
+      "layer": "SH",
+      "text": "200 cm",
+      "x": 197817.72,
+      "y": 12227.27
+    },
+    {
+      "layer": "text",
+      "text": "Solid wood door with smoky finish",
+      "x": 180703.64,
+      "y": 14060.16
+    },
+    {
+      "layer": "text",
+      "text": "Gray porcelain tiles (120x60 cm)",
+      "x": 180703.64,
+      "y": 13980.16
+    },
+    {
+      "layer": "text",
+      "text": "White cement plaster with white anti-static coating",
+      "x": 180703.64,
+      "y": 14020.16
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum flashing (5 cm thickness)",
+      "x": 180703.64,
+      "y": 13940.16
+    },
+    {
+      "layer": "text",
+      "text": "Tempered glass railing with stainless steel base",
+      "x": 180703.64,
+      "y": 13900.16
+    },
+    {
+      "layer": "text",
+      "text": "Gray porcelain tiles (120x60 cm)",
+      "x": 184909.3,
+      "y": 14060.16
+    },
+    {
+      "layer": "text",
+      "text": "White cement plaster with white anti-static coating",
+      "x": 184909.3,
+      "y": 14020.16
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum flashing (5 cm thickness)",
+      "x": 184909.3,
+      "y": 13940.16
+    },
+    {
+      "layer": "text",
+      "text": "Tempered glass railing with stainless steel base",
+      "x": 184909.3,
+      "y": 13900.16
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum window",
+      "x": 184909.3,
+      "y": 13980.16
+    },
+    {
+      "layer": "text",
+      "text": "Gray porcelain tiles (120x60 cm)",
+      "x": 188717.72,
+      "y": 14124.08
+    },
+    {
+      "layer": "text",
+      "text": "White cement plaster with white anti-static coating",
+      "x": 188717.72,
+      "y": 14084.08
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum flashing (5 cm thickness)",
+      "x": 188717.72,
+      "y": 14004.08
+    },
+    {
+      "layer": "text",
+      "text": "Tempered glass railing with stainless steel base",
+      "x": 188717.72,
+      "y": 13964.08
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum window",
+      "x": 188717.72,
+      "y": 14044.08
+    }
+  ],
+  "dimensions": [
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 320.0,
+      "x": 192665.01,
+      "y": 12942.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 300.0,
+      "x": 192665.01,
+      "y": 13642.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 237.0,
+      "x": 196408.55,
+      "y": 13262.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 300.0,
+      "x": 196759.63,
+      "y": 13642.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 320.0,
+      "x": 196699.73,
+      "y": 13262.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 935.0,
+      "x": 189646.49,
+      "y": 12902.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 320.0,
+      "x": 188157.01,
+      "y": 12942.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 80.0,
+      "x": 188157.01,
+      "y": 13262.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 300.0,
+      "x": 188157.01,
+      "y": 13342.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 80.0,
+      "x": 188157.01,
+      "y": 13642.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 120.0,
+      "x": 188157.01,
+      "y": 13722.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 960.0,
+      "x": 183869.35,
+      "y": 13842.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 60.0,
+      "x": 183909.01,
+      "y": 12882.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 780.0,
+      "x": 183909.01,
+      "y": 12942.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 120.0,
+      "x": 183909.01,
+      "y": 13722.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 940.0,
+      "x": 180106.01,
+      "y": 13842.97
+    },
+    {
+      "layer": "3",
+      "text": "",
+      "measurement": 20.0,
+      "x": 180106.01,
+      "y": 12902.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 600.0,
+      "x": 193202.33,
+      "y": 18192.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 650.0,
+      "x": 191780.98,
+      "y": 18216.49
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 340.0,
+      "x": 192430.98,
+      "y": 18216.49
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 410.0,
+      "x": 192770.98,
+      "y": 18216.49
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 1110.0,
+      "x": 193119.22,
+      "y": 18192.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 670.0,
+      "x": 192913.68,
+      "y": 17022.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 965.0,
+      "x": 193105.98,
+      "y": 16391.46
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 210.0,
+      "x": 192202.58,
+      "y": 16352.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 450.0,
+      "x": 192760.38,
+      "y": 16802.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 450.0,
+      "x": 192430.98,
+      "y": 16791.17
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 225.0,
+      "x": 192880.98,
+      "y": 16791.17
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 75.0,
+      "x": 193105.98,
+      "y": 16791.17
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 45.0,
+      "x": 192454.91,
+      "y": 18192.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 45.0,
+      "x": 192454.91,
+      "y": 18147.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 45.0,
+      "x": 192454.91,
+      "y": 18102.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 160.0,
+      "x": 192454.91,
+      "y": 18057.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 355.0,
+      "x": 192445.59,
+      "y": 17887.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 210.0,
+      "x": 192630.98,
+      "y": 17625.43
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 230.0,
+      "x": 192410.98,
+      "y": 17702.45
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 130.0,
+      "x": 192371.88,
+      "y": 17732.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 190.0,
+      "x": 192243.09,
+      "y": 17932.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 190.0,
+      "x": 192190.98,
+      "y": 17828.37
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 380.0,
+      "x": 192180.98,
+      "y": 17702.45
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 395.0,
+      "x": 191920.97,
+      "y": 17937.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 705.0,
+      "x": 192445.59,
+      "y": 17532.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 410.0,
+      "x": 192830.98,
+      "y": 16880.44
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 600.0,
+      "x": 192420.98,
+      "y": 16880.44
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 800.0,
+      "x": 192015.93,
+      "y": 16612.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 650.0,
+      "x": 191940.98,
+      "y": 17251.96
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 270.0,
+      "x": 192590.98,
+      "y": 17251.96
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 500.0,
+      "x": 192770.75,
+      "y": 17532.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 220.0,
+      "x": 192770.75,
+      "y": 17532.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 220.0,
+      "x": 192640.98,
+      "y": 17678.15
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 220.0,
+      "x": 192640.98,
+      "y": 17852.94
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 170.0,
+      "x": 192770.75,
+      "y": 17762.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 120.0,
+      "x": 192015.93,
+      "y": 17412.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 920.0,
+      "x": 192284.95,
+      "y": 16612.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 200.0,
+      "x": 195886.7,
+      "y": 18192.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 220.0,
+      "x": 195821.09,
+      "y": 18192.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 1100.0,
+      "x": 195780.98,
+      "y": 18026.6
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 550.0,
+      "x": 195800.98,
+      "y": 17055.31
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 370.0,
+      "x": 196360.98,
+      "y": 17055.31
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 140.0,
+      "x": 196740.98,
+      "y": 17055.31
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 460.0,
+      "x": 196183.42,
+      "y": 17142.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 390.0,
+      "x": 196183.42,
+      "y": 17142.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 120.0,
+      "x": 195820.98,
+      "y": 17185.68
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 260.0,
+      "x": 195940.98,
+      "y": 17185.68
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 150.0,
+      "x": 196200.98,
+      "y": 17185.68
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 170.0,
+      "x": 196210.98,
+      "y": 17675.22
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 165.0,
+      "x": 196308.7,
+      "y": 17687.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 395.0,
+      "x": 196044.14,
+      "y": 17542.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 400.0,
+      "x": 195800.98,
+      "y": 17846.36
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 180.0,
+      "x": 196200.98,
+      "y": 17846.36
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 220.0,
+      "x": 196390.98,
+      "y": 17845.36
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 205.0,
+      "x": 196512.21,
+      "y": 17767.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 240.0,
+      "x": 196620.98,
+      "y": 17821.71
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 270.0,
+      "x": 196719.64,
+      "y": 17942.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 160.0,
+      "x": 196719.64,
+      "y": 17672.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 170.0,
+      "x": 196800.98,
+      "y": 17637.57
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 105.0,
+      "x": 196352.42,
+      "y": 17782.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 170.0,
+      "x": 196390.98,
+      "y": 17724.51
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 215.0,
+      "x": 196472.37,
+      "y": 17757.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 510.0,
+      "x": 196614.6,
+      "y": 17512.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 40.0,
+      "x": 196183.42,
+      "y": 16662.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 30.0,
+      "x": 196183.42,
+      "y": 16622.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 410.0,
+      "x": 196614.6,
+      "y": 16982.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 480.0,
+      "x": 196400.98,
+      "y": 16889.62
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 200.0,
+      "x": 199886.7,
+      "y": 18192.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 220.0,
+      "x": 199821.09,
+      "y": 18192.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 1100.0,
+      "x": 199780.98,
+      "y": 18026.6
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 300.0,
+      "x": 200880.98,
+      "y": 18026.6
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 300.0,
+      "x": 196880.98,
+      "y": 18026.6
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 260.0,
+      "x": 200630.98,
+      "y": 17591.21
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 480.0,
+      "x": 200370.98,
+      "y": 17591.21
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 110.0,
+      "x": 199890.98,
+      "y": 17591.21
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 145.0,
+      "x": 200701.86,
+      "y": 17677.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 100.0,
+      "x": 200701.86,
+      "y": 17677.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 145.0,
+      "x": 200701.86,
+      "y": 17777.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 870.0,
+      "x": 199810.98,
+      "y": 17879.21
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 160.0,
+      "x": 200680.98,
+      "y": 17879.21
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 100.0,
+      "x": 200288.95,
+      "y": 17777.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 60.0,
+      "x": 200288.95,
+      "y": 17677.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 100.0,
+      "x": 200288.95,
+      "y": 17617.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 220.0,
+      "x": 200288.95,
+      "y": 17517.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 545.0,
+      "x": 200288.95,
+      "y": 17297.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 110.0,
+      "x": 200288.95,
+      "y": 16752.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 70.0,
+      "x": 200288.95,
+      "y": 16642.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 120.0,
+      "x": 199890.98,
+      "y": 17105.99
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 90.0,
+      "x": 200010.98,
+      "y": 17105.99
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 530.0,
+      "x": 200100.98,
+      "y": 17105.99
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 110.0,
+      "x": 200630.98,
+      "y": 17105.99
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 60.0,
+      "x": 199890.98,
+      "y": 17214.98
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 680.0,
+      "x": 199950.98,
+      "y": 17214.98
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 140.0,
+      "x": 200740.98,
+      "y": 17105.99
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 500.0,
+      "x": 200930.35,
+      "y": 17072.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 600.0,
+      "x": 200930.35,
+      "y": 17072.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 300.0,
+      "x": 200930.35,
+      "y": 17672.97
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 1100.0,
+      "x": 200880.98,
+      "y": 16530.17
+    },
+    {
+      "layer": "DIM",
+      "text": "",
+      "measurement": 220.0,
+      "x": 200630.98,
+      "y": 17591.21
+    },
+    {
+      "layer": "9",
+      "text": "",
+      "measurement": 284.0,
+      "x": 192140.98,
+      "y": 16542.3
+    },
+    {
+      "layer": "9",
+      "text": "",
+      "measurement": 681.0,
+      "x": 192424.98,
+      "y": 16542.3
+    }
+  ],
+  "materials_found": [
+    {
+      "layer": "text",
+      "text": "Solid wood door with smoky finish",
+      "x": 180703.64,
+      "y": 14060.16
+    },
+    {
+      "layer": "text",
+      "text": "Gray porcelain tiles (120x60 cm)",
+      "x": 180703.64,
+      "y": 13980.16
+    },
+    {
+      "layer": "text",
+      "text": "White cement plaster with white anti-static coating",
+      "x": 180703.64,
+      "y": 14020.16
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum flashing (5 cm thickness)",
+      "x": 180703.64,
+      "y": 13940.16
+    },
+    {
+      "layer": "text",
+      "text": "Tempered glass railing with stainless steel base",
+      "x": 180703.64,
+      "y": 13900.16
+    },
+    {
+      "layer": "text",
+      "text": "Gray porcelain tiles (120x60 cm)",
+      "x": 184909.3,
+      "y": 14060.16
+    },
+    {
+      "layer": "text",
+      "text": "White cement plaster with white anti-static coating",
+      "x": 184909.3,
+      "y": 14020.16
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum flashing (5 cm thickness)",
+      "x": 184909.3,
+      "y": 13940.16
+    },
+    {
+      "layer": "text",
+      "text": "Tempered glass railing with stainless steel base",
+      "x": 184909.3,
+      "y": 13900.16
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum window",
+      "x": 184909.3,
+      "y": 13980.16
+    },
+    {
+      "layer": "text",
+      "text": "Gray porcelain tiles (120x60 cm)",
+      "x": 188717.72,
+      "y": 14124.08
+    },
+    {
+      "layer": "text",
+      "text": "White cement plaster with white anti-static coating",
+      "x": 188717.72,
+      "y": 14084.08
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum flashing (5 cm thickness)",
+      "x": 188717.72,
+      "y": 14004.08
+    },
+    {
+      "layer": "text",
+      "text": "Tempered glass railing with stainless steel base",
+      "x": 188717.72,
+      "y": 13964.08
+    },
+    {
+      "layer": "text",
+      "text": "Black aluminum window",
+      "x": 188717.72,
+      "y": 14044.08
+    }
+  ],
+  "areas_found": [
+    {
+      "layer": "text",
+      "text": "Net area = 108.50 sqm",
+      "x": 188324.36,
+      "y": 17033.69
+    },
+    {
+      "layer": "text",
+      "text": "Net terrace area more than balcony = 38.50 sqm",
+      "x": 180210.51,
+      "y": 16416.21
+    },
+    {
+      "layer": "text",
+      "text": "This floor area = 154.30 sqm",
+      "x": 180987.42,
+      "y": 16030.87
+    },
+    {
+      "layer": "text",
+      "text": "All building area = 303.42 sqm",
+      "x": 180948.13,
+      "y": 15985.39
+    },
+    {
+      "layer": "text",
+      "text": "This floor area = 149.12 sqm",
+      "x": 184987.42,
+      "y": 16030.87
+    },
+    {
+      "layer": "text",
+      "text": "All building area = 303.42 sqm",
+      "x": 184948.13,
+      "y": 15985.39
+    },
+    {
+      "layer": "text",
+      "text": "This floor area = 154.30 sqm",
+      "x": 192987.42,
+      "y": 16030.87
+    },
+    {
+      "layer": "text",
+      "text": "All building area = 303.42 sqm",
+      "x": 192948.13,
+      "y": 15985.39
+    },
+    {
+      "layer": "text",
+      "text": "This floor area = 149.12 sqm",
+      "x": 196987.42,
+      "y": 16030.87
+    },
+    {
+      "layer": "text",
+      "text": "All building area = 303.42 sqm",
+      "x": 196948.13,
+      "y": 15985.39
+    }
+  ]
+}

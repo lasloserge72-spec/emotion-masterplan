@@ -10,7 +10,16 @@
 
 - **3D-карта Mapbox** — [`MASTERPLAN_MAPBOX.html`](./MASTERPLAN_MAPBOX.html)
 - **2D-карта Leaflet** — [`MASTERPLAN_INTERACTIVE.html`](./MASTERPLAN_INTERACTIVE.html)
+- **Вилла 303 м²** — [`villa.html`](./villa.html)
 - **Лендинг** — [`index.html`](./index.html)
+
+## Вилла 303 м²
+
+- `documents/ru/` — инженерные документы на русском
+- `documents/en/` — engineering documents in English
+- `documents/ka/` — საინჟინრო დოკუმენტები ქართულად
+- `photos/house/` — визуализации фасадов и Roof Garden
+- `drawings/` — PDF, DWG, DXF, JSON и архив рендеров
 
 ## Данные
 
